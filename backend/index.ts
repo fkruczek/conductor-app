@@ -1,12 +1,13 @@
-import express from 'express';
+import express from 'express'
+import db from './startup/db'
+import routes from './startup/routes'
+import config from 'config'
 
-const app = express();
-const PORT = 3000;
+const app = express()
 
-app.get('/', (req, res) => {
-  res.send('Hello world');
-});
+db()
+routes(app)
 
-app.listen(PORT, () => {
-  console.log(`Express with Typescript! http://localhost:${PORT}`);
-});
+app.listen(config.get('port'), () => {
+  console.log('Server has started...')
+})
