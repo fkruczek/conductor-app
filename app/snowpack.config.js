@@ -1,6 +1,6 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
-  "extends": "@snowpack/app-scripts-react",
+  extends: '@snowpack/app-scripts-react',
   // mount: {
   //   public: { url: '/', static: true },
   //   src: { url: '/dist' },
@@ -30,4 +30,4 @@ module.exports = {
   buildOptions: {
     /* ... */
   },
-};
+}

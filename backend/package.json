@@ -2,7 +2,8 @@
   "dependencies": {
     "config": "^3.3.6",
     "express": "^4.17.1",
-    "mongoose": "^5.12.2"
+    "mongoose": "^5.12.2",
+    "socket.io": "^4.0.1"
   },
   "devDependencies": {
     "@types/config": "^0.0.38",
