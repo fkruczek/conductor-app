@@ -5937,7 +5937,7 @@ export default function Score(): ReactElement {
   console.log('render')
   const divRef = useRef<HTMLDivElement>(null)
   const [score, setScore] = useState<osmd.OpenSheetMusicDisplay>()
-  const [currentPage, setCurentPage] = useState(0)
+  const [currentPage] = useState(0)
   // const {}
 
   const goToNextPage = () => {
@@ -5998,7 +5998,8 @@ export default function Score(): ReactElement {
 
   function getCurrentMeasureNumber() {
     // TODO: check if always defined
-    return score!.cursor.iterator.CurrentMeasureIndex + 1
+    if (!score) return 0
+    return score.cursor.iterator.CurrentMeasureIndex + 1
   }
 
   return (

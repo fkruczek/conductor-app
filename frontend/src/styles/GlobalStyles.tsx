@@ -5,15 +5,13 @@ import tw, { theme } from 'twin.macro'
 const customStyles = css`
   body {
     -webkit-tap-highlight-color: ${theme`colors.purple.500`};
-    ${tw`antialiased`}
-  }
-  img,
-  video {
-    max-width: 100%;
-    // height: 0;
+    ${tw`antialiased m-0 min-h-screen`}
   }
 `
-
-const GlobalStyles = () => <Global styles={customStyles} />
+const GlobalStyles = () => (
+  <>
+    <Global styles={customStyles} />
+  </>
+)
 
 export default GlobalStyles

@@ -1,5 +1,4 @@
 import React from 'react'
-import tw from 'twin.macro'
 import { RoomsList } from './pages/RoomsList'
 // import Score from './components/Score'
 
@@ -12,7 +11,7 @@ import { RoomsList } from './pages/RoomsList'
 //   ],
 // }
 
-const Score = React.lazy(() => import('./components/Score'))
+// const Score = React.lazy(() => import('./components/Score'))
 
 const App = () => (
   <React.Suspense fallback={<div>loading...</div>}>
