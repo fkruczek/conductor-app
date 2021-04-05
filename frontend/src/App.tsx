@@ -1,5 +1,7 @@
 import React from 'react'
+import { Route, Switch } from 'react-router-dom'
 import { RoomsList } from './pages/RoomsList'
+import { CreateRoom } from './pages/CreateRoom'
 // import Score from './components/Score'
 
 // TODO: how it works?
@@ -12,11 +14,16 @@ import { RoomsList } from './pages/RoomsList'
 // }
 
 // const Score = React.lazy(() => import('./components/Score'))
-
+// TODO: Code splitting (rrd documentation)
 const App = () => (
-  <React.Suspense fallback={<div>loading...</div>}>
-    <RoomsList />
-  </React.Suspense>
+  <Switch>
+    <Route path="/create-concert">
+      <CreateRoom />
+    </Route>
+    <Route path="/">
+      <RoomsList />
+    </Route>
+  </Switch>
 )
 
 export default App
