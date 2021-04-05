@@ -12,10 +12,10 @@ interface RoomResponse {
 }
 
 const rooms: RoomResponse[] = [
-  { id: '1', name: 'Some concert' },
-  { id: '3', name: 'Some secod concert' },
+  { id: '0', name: 'Some concert' },
+  { id: '1', name: 'Some secod concert' },
   { id: '2', name: 'Some thirdconcert' },
-  { id: '4', name: 'Some other concert' },
+  { id: '3', name: 'Some other concert' },
 ]
 
 export default function (httpServer: HttpServer): void {
@@ -46,9 +46,9 @@ export default function (httpServer: HttpServer): void {
 
   io.on('connection', onConnection)
 
-  // TODO: maybe remove this "io" from here
+  // TODO: maybe remove this "io" from here if not neccessary
   const registerRoomsHandlers = (
-    _: Server<DefaultEventsMap, DefaultEventsMap>,
+    io: Server<DefaultEventsMap, DefaultEventsMap>,
     socket: Socket<DefaultEventsMap, DefaultEventsMap>
   ) => {
     const createRoom = ({ name }: CreateRoomRequest) => {
@@ -57,7 +57,8 @@ export default function (httpServer: HttpServer): void {
     }
 
     const emitRooms = () => {
-      socket.emit('rooms', rooms)
+      console.log('emitting new rooms')
+      io.emit('rooms', [...rooms])
     }
 
     const getRooms = (cb: (rooms: RoomResponse[]) => void) => {
