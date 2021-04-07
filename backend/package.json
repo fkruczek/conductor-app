@@ -1,7 +1,10 @@
 {
   "dependencies": {
     "config": "^3.3.6",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "google-auth-library": "^7.0.4",
     "mongoose": "^5.12.2",
     "socket.io": "^4.0.1"
   },
@@ -22,6 +25,6 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "nodemon index.ts"
+    "start": "nodemon --require dotenv/config index.ts"
   }
 }

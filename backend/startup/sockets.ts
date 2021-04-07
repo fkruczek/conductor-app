@@ -58,14 +58,9 @@ export default function (httpServer: HttpServer): void {
 
     const emitRooms = () => {
       console.log('emitting new rooms')
-      io.emit('rooms', [...rooms])
-    }
-
-    const getRooms = (cb: (rooms: RoomResponse[]) => void) => {
-      cb(rooms)
+      io.emit('rooms:list', [...rooms])
     }
 
     socket.on('rooms:create', createRoom)
-    socket.on('rooms:getAll', getRooms)
   }
 }

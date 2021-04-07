@@ -39,9 +39,9 @@ let socket: Socket<DefaultEventsMap, DefaultEventsMap> | null = null
 export const initSocket = () => {
   if (socket) return // TODO: for sure?
   socket = io('http://localhost:3001')
-  console.log(`Connecting socket...`)
+  console.log('Connecting socket...')
   socket.on('connect', () => {
-    console.log('con')
+    console.log('Socket successfully connected.')
   })
   // if (socket && room) socket.emit('join', room)
 }
@@ -63,11 +63,7 @@ type Callback = (whatever: null, rooms: RoomResponse[]) => void
 export const subscribeToRoomsList = (cb: Callback) => {
   if (!socket) return true // TODO: why return true???
 
-  socket.on('rooms', (rooms: RoomResponse[]) => {
-    return cb(null, rooms) // TODO: why not cb(msg)???
-  })
-  // TODO: change it to HTTP GET?
-  socket.emit('rooms:getAll', (rooms: RoomResponse[]) => {
+  socket.on('rooms:list', (rooms: RoomResponse[]) => {
     return cb(null, rooms) // TODO: why not cb(msg)???
   })
 
