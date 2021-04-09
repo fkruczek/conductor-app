@@ -28,22 +28,34 @@ const User = mongoose.model('User', userSchema)
 
 // TODO: error handling, validation
 router.post('/google', async (req, res) => {
+  console.log(req.body)
   const { token } = req.body
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: CLIENT_ID,
   })
   const payload = ticket.getPayload()
-  const newUser = new User(payload)
-  console.log(payload)
+  // TODO: Is it correct status and is it needed?
+  if (!payload) return res.status(404).send('Couldnt get ticket payload')
+  const { given_name, name, picture, email } = payload
+  const newUser = new User({
+    // TODO: Check if given_name can be null
+    name: given_name || name,
+    picture,
+    email,
+  })
   console.log(newUser)
+
+  console.log('setting: ', newUser.id)
+  req.session.userId = 'asdfasdf'
+  // req.session.save()
+
   //   const user = await db.user.upsert({
   //     where: { email: email },
   //     update: { name, picture },
   //     create: { name, email, picture },
   //   })
-  res.status(201)
-  res.json(newUser)
+  return res.status(201).end()
 })
 
 export default router
