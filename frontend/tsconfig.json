@@ -20,7 +20,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react", // for the css prop,
-    "baseUrl": "./",
+    "baseUrl": "./src/",
     
     "noImplicitReturns": true,
   },

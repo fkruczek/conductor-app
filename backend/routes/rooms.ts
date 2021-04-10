@@ -8,6 +8,15 @@ const router = express.Router()
 //   name: String,
 // })
 
+// router.get('/', (_, res) => {
+//   const silence = new Kitten({ name: 'Silence' })
+
+//   silence.save((err, silence: any) => {
+//     if (err) throw new Error(err.message)
+//     res.send(silence.name)
+//   })
+// })
+
 // const Kitten = mongoose.model('Kitten', kittySchema)
 
 router.get('/', isAuth, (_, res) => {

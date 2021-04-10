@@ -7,9 +7,9 @@ import cors from 'cors'
 
 export default function (app: Express): void {
   app.use(
-    cors({ credentials: true, origin: 'http://localhost:3000' }),
+    cors({ credentials: true, origin: 'http://localhost:3000' }), // TODO: do i need this?
     express.json(),
-    express.urlencoded({ extended: true })
+    express.urlencoded({ extended: true }) // TODO: do i need this?
   )
   app.use('/api/auth', auth)
   app.use('/api/suites', suites)

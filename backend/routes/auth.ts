@@ -3,59 +3,55 @@ import express from 'express'
 import { OAuth2Client } from 'google-auth-library'
 import mongoose from 'mongoose'
 
-const CLIENT_ID = config.get<string>('googleClientId')
-
-const client = new OAuth2Client(CLIENT_ID)
-
 const router = express.Router()
 
+// TODO: extract mongoose stuff from here
 const userSchema = new mongoose.Schema({
   name: String,
   email: String,
   picture: String,
 })
-
 const User = mongoose.model('User', userSchema)
 
-// router.get('/', (_, res) => {
-//   const silence = new Kitten({ name: 'Silence' })
-
-//   silence.save((err, silence: any) => {
-//     if (err) throw new Error(err.message)
-//     res.send(silence.name)
-//   })
-// })
+const CLIENT_ID = config.get<string>('googleClientId')
+const client = new OAuth2Client(CLIENT_ID)
 
 // TODO: error handling, validation
+// TODO: add typescript to all of this
 router.post('/google', async (req, res) => {
-  console.log(req.body)
   const { token } = req.body
+
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: CLIENT_ID,
   })
-  const payload = ticket.getPayload()
+
+  const googleUserPayload = ticket.getPayload()
+
   // TODO: Is it correct status and is it needed?
-  if (!payload) return res.status(404).send('Couldnt get ticket payload')
-  const { given_name, name, picture, email } = payload
-  const newUser = new User({
+  if (!googleUserPayload) return res.status(404).send('Couldnt get ticket payload')
+
+  const { given_name, name, picture, email } = googleUserPayload
+
+  const newUser = {
     // TODO: Check if given_name can be null
     name: given_name || name,
     picture,
     email,
+  }
+
+  const newOrUpdatedUser = await User.findOneAndUpdate({ email }, newUser, {
+    upsert: true,
+    new: true,
   })
-  console.log(newUser)
 
-  console.log('setting: ', newUser.id)
-  req.session.userId = 'asdfasdf'
-  // req.session.save()
+  console.log(newOrUpdatedUser)
 
-  //   const user = await db.user.upsert({
-  //     where: { email: email },
-  //     update: { name, picture },
-  //     create: { name, email, picture },
-  //   })
+  req.session.userId = newOrUpdatedUser.id
+
   return res.status(201).end()
 })
+
+// TODO: logout, delete account
 
 export default router

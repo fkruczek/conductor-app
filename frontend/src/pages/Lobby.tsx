@@ -22,7 +22,7 @@ export const Lobby = () => {
   //   }, [])
 
   return (
-    <div tw="bg-gradient-to-b from-electric to-ribbon min-h-screen">
+    <div tw="bg-gradient-to-b from-primary to-ribbon min-h-screen">
       <div tw="justify-items-center grid gap-4 m-auto p-4 max-w-lg font-mono">
         <h1>Lobby</h1>
         <span>You are in room: {id}</span>

@@ -33,7 +33,7 @@ import { RoomRequest } from './../models/index'
 
 import io, { Socket } from 'socket.io-client'
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events'
-import { RoomResponse } from 'src/models'
+import { RoomResponse } from 'models'
 let socket: Socket<DefaultEventsMap, DefaultEventsMap> | null = null
 
 export const initSocket = () => {

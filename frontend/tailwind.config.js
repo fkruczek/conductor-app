@@ -1,8 +1,9 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   theme: {
     extend: {
       colors: {
-        electric: '#db00ff',
+        primary: '#FFAD1F',
         ribbon: '#0047ff',
       },
     },

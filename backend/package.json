@@ -31,6 +31,6 @@
   },
   "scripts": {
     "build": "NODE_PATH=./ tsc",
-    "start": "NODE_PATH=./ nodemon --require dotenv/config index.ts"
+    "s": "NODE_PATH=./ nodemon --require dotenv/config index.ts"
   }
 }

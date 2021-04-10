@@ -3,8 +3,8 @@ import 'twin.macro'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
-import { RoomRequest } from 'src/models'
-import { initSocket, createRoom } from 'src/sockets'
+import { RoomRequest } from 'models'
+import { initSocket, createRoom } from 'sockets'
 
 export const CreateRoom = () => {
   const {
@@ -20,7 +20,7 @@ export const CreateRoom = () => {
   }, [])
 
   return (
-    <div tw="bg-gradient-to-b from-electric to-ribbon min-h-screen">
+    <div tw="bg-gradient-to-b from-primary to-ribbon min-h-screen">
       <div tw="justify-items-center grid gap-4 m-auto p-4 max-w-lg font-mono">
         <form onSubmit={onSubmit}>
           <label htmlFor="name">Concert name</label>
