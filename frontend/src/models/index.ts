@@ -6,3 +6,10 @@ export interface RoomResponse {
 export interface RoomRequest {
   name: string
 }
+
+export interface LoginResponse {
+  email: string
+  name: string
+  picture: string
+  _id: string
+}

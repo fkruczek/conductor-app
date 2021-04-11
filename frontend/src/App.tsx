@@ -1,8 +1,9 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import { RoomsList } from './pages/RoomsList'
 import { CreateRoom } from './pages/CreateRoom'
 import { Lobby } from './pages/Lobby'
+import { Header } from 'components/Header'
 // import Score from './components/Score'
 
 // TODO: how it works?
@@ -17,17 +18,23 @@ import { Lobby } from './pages/Lobby'
 // const Score = React.lazy(() => import('./components/Score'))
 // TODO: Code splitting (rrd documentation)
 const App = () => (
-  <Switch>
-    <Route path="/create-concert">
-      <CreateRoom />
-    </Route>
-    <Route path="/lobby/:id">
-      <Lobby />
-    </Route>
-    <Route path="/">
-      <RoomsList />
-    </Route>
-  </Switch>
+  <>
+    <Header />
+    <Switch>
+      <Route path="/create-concert">
+        <CreateRoom />
+      </Route>
+      <Route path="/lobby/:id">
+        <Lobby />
+      </Route>
+      <Route path="/">
+        <RoomsList />
+      </Route>
+      <Route>
+        <Redirect to="/" />
+      </Route>
+    </Switch>
+  </>
 )
 
 export default App
