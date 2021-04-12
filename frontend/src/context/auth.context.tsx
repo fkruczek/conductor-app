@@ -1,7 +1,8 @@
 import { LoginResponse } from 'models'
-import React, { createContext, ReactNode, useCallback, useEffect, useState } from 'react'
-import { GoogleLoginResponse, GoogleLoginResponseOffline, useGoogleLogin } from 'react-google-login'
+import React, { createContext, ReactNode, useCallback, useEffect } from 'react'
+import { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login'
 import { useAsync } from 'utils/useAsync'
+import http from 'utils/apiClient'
 
 if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
   throw new Error('REACT_APP_GOOGLE_CLIENT_ID is undefined!!!')
@@ -11,6 +12,7 @@ interface AuthContext {
   user: LoginResponse | null
   handleLoginSuccess?: (response: GoogleLoginResponse | GoogleLoginResponseOffline) => void
   handleLogoutSuccess?: () => Promise<void>
+  handleLoginFailure?: () => void
 }
 
 const localStorageKey = '__google_auth_token__'
@@ -18,28 +20,21 @@ const localStorageKey = '__google_auth_token__'
 const AuthContext = createContext<AuthContext>({ user: null })
 AuthContext.displayName = 'AuthContext'
 
-// async function getUser() {
-//   let user = null
-
-//   const token = await auth.getToken()
-//   if (token) {
-//     const data = await client('me', { token })
-//     user = data.user
-//   }
-
-//   return user
+// const oldfetchUser = (token: string): Promise<LoginResponse> => {
+//   return fetch('http://localhost:3001/api/auth/google', {
+//     method: 'POST',
+//     body: JSON.stringify({
+//       token,
+//     }),
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     credentials: 'include',
+//   }).then((res) => res.json())
 // }
+
 const fetchUser = (token: string): Promise<LoginResponse> => {
-  return fetch('http://localhost:3001/api/auth/google', {
-    method: 'POST',
-    body: JSON.stringify({
-      token,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-  }).then((res) => res.json())
+  return http.post('auth/google', { token }).then((res) => res.data)
 }
 
 const getUser = (): Promise<LoginResponse | null> => {
@@ -48,24 +43,13 @@ const getUser = (): Promise<LoginResponse | null> => {
   return fetchUser(token)
 }
 
-const handleLoginFailure = async () => {
-  // TODO: maybe clear auth context here?
-  console.log('login failure')
-}
-
 const AuthProvider = (props: { children: ReactNode }) => {
-  const {
-    data: user,
-    error,
-    isLoading,
-    isIdle,
-    isError,
-    isSuccess,
-    run,
-    setData,
-    status,
-  } = useAsync<LoginResponse | null>(null)
-  // const [user, setUser] = useState<LoginResponse | null>(null)
+  const { data: user, isLoading, isIdle, run, setData } = useAsync<LoginResponse | null>(null)
+
+  const handleLoginFailure = useCallback(() => {
+    window.localStorage.removeItem(localStorageKey)
+    setData(null)
+  }, [setData])
 
   const handleLoginSuccess = useCallback(
     async (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
@@ -76,25 +60,21 @@ const AuthProvider = (props: { children: ReactNode }) => {
 
       run(fetchUser(tokenId))
     },
-    [run]
+    [handleLoginFailure, run]
   )
 
   const handleLogoutSuccess = useCallback(async () => {
-    console.log('login out')
-
     window.localStorage.removeItem(localStorageKey)
-
     setData(null)
   }, [setData])
 
   useEffect(() => {
     run(getUser())
   }, [run])
-  const value = React.useMemo(() => ({ user, handleLoginSuccess, handleLogoutSuccess }), [
-    handleLoginSuccess,
-    handleLogoutSuccess,
-    user,
-  ])
+  const value = React.useMemo(
+    () => ({ user, handleLoginSuccess, handleLogoutSuccess, isIdle, isLoading }),
+    [handleLoginSuccess, handleLogoutSuccess, user, isIdle, isLoading]
+  )
 
   // TODO: add spinner, error returns?
   return <AuthContext.Provider value={value} {...props} />
@@ -108,4 +88,4 @@ const useAuthContext = () => {
   return context
 }
 
-export { AuthProvider, useAuthContext, handleLoginFailure }
+export { AuthProvider, useAuthContext }

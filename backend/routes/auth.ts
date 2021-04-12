@@ -20,36 +20,37 @@ const client = new OAuth2Client(CLIENT_ID)
 // TODO: add typescript to all of this
 router.post('/google', async (req, res) => {
   const { token } = req.body
+  if (!token) return res.status(401).send('Token not provided')
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: CLIENT_ID,
+    })
 
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: CLIENT_ID,
-  })
+    const googleUserPayload = ticket.getPayload()
 
-  const googleUserPayload = ticket.getPayload()
+    if (!googleUserPayload) throw new Error('Couldnt get user payload')
 
-  // TODO: Is it correct status and is it needed?
-  if (!googleUserPayload) return res.status(404).send('Couldnt get ticket payload')
+    const { given_name, name, picture, email } = googleUserPayload
 
-  const { given_name, name, picture, email } = googleUserPayload
+    const newUser = {
+      // TODO: Check if given_name can be null
+      name: given_name || name,
+      picture,
+      email,
+    }
 
-  const newUser = {
-    // TODO: Check if given_name can be null
-    name: given_name || name,
-    picture,
-    email,
+    const newOrUpdatedUser = await User.findOneAndUpdate({ email }, newUser, {
+      upsert: true,
+      new: true,
+    })
+
+    req.session.userId = newOrUpdatedUser.id
+
+    return res.status(201).send(newOrUpdatedUser)
+  } catch (ex) {
+    return res.status(404).send(ex)
   }
-
-  const newOrUpdatedUser = await User.findOneAndUpdate({ email }, newUser, {
-    upsert: true,
-    new: true,
-  })
-
-  console.log(newOrUpdatedUser)
-
-  req.session.userId = newOrUpdatedUser.id
-
-  return res.status(201).end()
 })
 
 // TODO: logout, delete account

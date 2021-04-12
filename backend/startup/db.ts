@@ -5,6 +5,6 @@ export default async function (): Promise<void> {
   await connect(config.get('db'), {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: true,
+    useFindAndModify: false,
   }).then(() => console.log('Connected to database...'))
 }
