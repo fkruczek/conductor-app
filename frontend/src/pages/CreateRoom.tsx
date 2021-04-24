@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { RoomRequest } from 'models'
-import { initSocket, createRoom } from 'sockets'
 
 export const CreateRoom = () => {
   const {
@@ -13,16 +11,12 @@ export const CreateRoom = () => {
     formState: { errors },
   } = useForm<RoomRequest>()
 
-  const onSubmit = handleSubmit((room) => createRoom(room))
-
-  useEffect(() => {
-    initSocket()
-  }, [])
+  const onSubmit = handleSubmit((room) => console.log(room))
 
   return (
     <div tw="justify-items-center grid gap-4 m-auto p-4 max-w-lg font-mono">
       <form onSubmit={onSubmit}>
-        <label htmlFor="name">Concert name</label>
+        <label htmlFor="name">Concert name: </label>
         <input id="name" {...register('name')} />
         <button type="submit">Create room</button>
         {errors.name && <span>{errors.name.message}</span>}

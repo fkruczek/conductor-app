@@ -25,7 +25,7 @@ export const RoomsList = () => {
     <div tw="bg-gradient-to-b from-primary to-white min-h-screen grid content-start">
       <div tw="grid m-auto p-4 max-w-lg mt-10 justify-items-center">
         <MainSection />
-        <h1 tw="text-4xl">{rooms.length ? 'Concerts:' : 'Currently no concerts :c'}</h1>
+        <h1 tw="text-4xl">{rooms.length ? 'Concerts:' : 'Currently no concerts...'}</h1>
         {rooms.map(({ id, name }) => (
           <Link to={`lobby/${id}`} key={id}>
             <Button>{name}</Button>

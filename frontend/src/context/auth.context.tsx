@@ -20,24 +20,11 @@ const localStorageKey = '__google_auth_token__'
 const AuthContext = createContext<AuthContext>({ user: null })
 AuthContext.displayName = 'AuthContext'
 
-// const oldfetchUser = (token: string): Promise<LoginResponse> => {
-//   return fetch('http://localhost:3001/api/auth/google', {
-//     method: 'POST',
-//     body: JSON.stringify({
-//       token,
-//     }),
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     credentials: 'include',
-//   }).then((res) => res.json())
-// }
-
 const fetchUser = (token: string): Promise<LoginResponse> => {
   return http.post('auth/google', { token }).then((res) => res.data)
 }
 
-const getUser = (): Promise<LoginResponse | null> => {
+const getUser = async (): Promise<LoginResponse | null> => {
   const token = window.localStorage.getItem(localStorageKey)
   if (!token) return Promise.resolve(null)
   return fetchUser(token)

@@ -1,4 +1,3 @@
-import { RoomRequest } from './../models/index'
 // import io, { Socket } from 'socket.io-client'
 // import { DefaultEventsMap } from 'socket.io-client/build/typed-events'
 // let socket: Socket<DefaultEventsMap, DefaultEventsMap>
@@ -31,14 +30,21 @@ import { RoomRequest } from './../models/index'
 //   if (socket) socket.emit('chat', { message, room })
 // }
 
+if (!process.env.REACT_APP_API_URL) {
+  throw new Error('REACT_APP_API_URL is undefined!!!')
+}
+
 import io, { Socket } from 'socket.io-client'
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events'
 import { RoomResponse } from 'models'
 let socket: Socket<DefaultEventsMap, DefaultEventsMap> | null = null
 
 export const initSocket = () => {
+  if (!process.env.REACT_APP_API_URL) {
+    throw new Error('REACT_APP_API_URL is undefined!!!')
+  }
   if (socket) return // TODO: for sure?
-  socket = io('http://localhost:3001')
+  socket = io(process.env.REACT_APP_API_URL)
   console.log('Connecting socket...')
   socket.on('connect', () => {
     console.log('Socket successfully connected.')
@@ -57,7 +63,6 @@ export const unsubscribeToRoomsList = () => {
 }
 
 // TODO: unsubscribing not only disconnect
-
 type Callback = (whatever: null, rooms: RoomResponse[]) => void
 
 export const subscribeToRoomsList = (cb: Callback) => {
@@ -69,12 +74,3 @@ export const subscribeToRoomsList = (cb: Callback) => {
 
   return
 }
-
-export const createRoom = (room: RoomRequest) => {
-  if (!socket) throw new Error('Socket not initiated')
-  socket.emit('rooms:create', room)
-}
-
-// export const sendMessage = (room: string, message: string) => {
-//   if (socket) socket.emit('chat', { message, room })
-// }

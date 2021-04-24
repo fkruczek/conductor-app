@@ -1,6 +1,10 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:3001/api/'
+if (!process.env.REACT_APP_API_URL) {
+  throw new Error('REACT_APP_API_URL is undefined!!!')
+}
+
+axios.defaults.baseURL = process.env.REACT_APP_API_URL + '/api/'
 axios.defaults.withCredentials = true
 axios.interceptors.response.use(undefined, (error) => {
   const expectedError =

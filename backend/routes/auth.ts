@@ -1,17 +1,8 @@
 import config from 'config'
 import express from 'express'
-import { OAuth2Client } from 'google-auth-library'
-import mongoose from 'mongoose'
-
 const router = express.Router()
-
-// TODO: extract mongoose stuff from here
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  picture: String,
-})
-const User = mongoose.model('User', userSchema)
+import User, { UserType } from 'models/user'
+import { OAuth2Client } from 'google-auth-library'
 
 const CLIENT_ID = config.get<string>('googleClientId')
 const client = new OAuth2Client(CLIENT_ID)
@@ -31,11 +22,14 @@ router.post('/google', async (req, res) => {
 
     if (!googleUserPayload) throw new Error('Couldnt get user payload')
 
-    const { given_name, name, picture, email } = googleUserPayload
+    const { name, picture, email } = googleUserPayload
 
-    const newUser = {
-      // TODO: Check if given_name can be null
-      name: given_name || name,
+    if (!name || !picture || !email) {
+      return res.status(401).send('Google account incomplete')
+    }
+
+    const newUser: UserType = {
+      name,
       picture,
       email,
     }

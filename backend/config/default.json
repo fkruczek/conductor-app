@@ -2,5 +2,5 @@
     "jwtPrivateKey": "",
     "googleClientId": "",
     "db": "mongodb://localhost:27017/quickstart?readPreference=primary&appname=Conductor&ssl=false",
-    "port": 3001
+    "port": 3002
   }
