@@ -3,7 +3,7 @@ export interface CreateRoomRequest {
 }
 
 export interface RoomResponse {
-  _id: string
+  id: string
   name: string
 }
 

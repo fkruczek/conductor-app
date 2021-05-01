@@ -7,6 +7,7 @@ const customStyles = css`
     -webkit-tap-highlight-color: ${theme`colors.purple.500`};
     ${tw`antialiased m-0 min-h-screen`}
     font-family: sans-serif;
+    overflow-x: hidden;
   }
 `
 const GlobalStyles = () => (

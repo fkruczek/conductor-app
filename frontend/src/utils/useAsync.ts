@@ -16,11 +16,19 @@ function useSafeDispatch(dispatch: React.Dispatch<() => void>) {
 const defaultInitialState = { status: 'idle', data: null, error: null }
 
 function useAsync<T>(
-  initialState: Record<string, unknown> | null
-): Record<string, unknown> & {
+  initialState: T
+): {
   data: T
   run: (promise: Promise<T>) => Promise<T>
   setData: (data: T) => void
+  setError: (error: string) => void
+  reset: () => void
+  isLoading: boolean
+  isIdle: boolean
+  isError: boolean
+  isSuccess: boolean
+  error: any
+  status: 'idle' | 'pending' | 'rejected' | 'resolved'
 } {
   const initialStateRef = React.useRef({
     ...defaultInitialState,

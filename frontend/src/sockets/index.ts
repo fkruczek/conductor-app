@@ -34,9 +34,9 @@ if (!process.env.REACT_APP_API_URL) {
   throw new Error('REACT_APP_API_URL is undefined!!!')
 }
 
+import { RoomResponse } from 'models'
 import io, { Socket } from 'socket.io-client'
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events'
-import { RoomResponse } from 'models'
 let socket: Socket<DefaultEventsMap, DefaultEventsMap> | null = null
 
 export const initSocket = () => {
@@ -45,11 +45,18 @@ export const initSocket = () => {
   }
   if (socket) return // TODO: for sure?
   socket = io(process.env.REACT_APP_API_URL)
-  console.log('Connecting socket...')
   socket.on('connect', () => {
     console.log('Socket successfully connected.')
   })
   // if (socket && room) socket.emit('join', room)
+}
+
+initSocket()
+
+export const emitRoomCreated = (userId: string) => {
+  console.log(userId)
+  if (!socket) return
+  socket.emit('rooms:created', { userId })
 }
 
 // export const disconnectSocket = () => {

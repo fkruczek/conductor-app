@@ -15,7 +15,7 @@ axios.interceptors.response.use(undefined, (error) => {
   return Promise.reject(error)
 })
 
-export default {
+export const api = {
   get: axios.get,
   post: axios.post,
   put: axios.put,

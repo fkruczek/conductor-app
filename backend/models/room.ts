@@ -1,114 +1,59 @@
-// import { Document, Model, model, Types, Schema, Query } from 'mongoose'
-// import { Company } from './Company'
+import { Document, Model, model, Schema, Types } from 'mongoose'
+import { UserDocument } from './user'
 
-// // Schema
-// const UserSchema = new Schema<UserDocument, UserModel>({
-//   firstName: {
-//     type: String,
-//     required: true,
-//   },
-//   lastName: String,
-//   username: {
-//     type: String,
-//     unique: true,
-//     required: true,
-//     lowercase: true,
-//   },
-//   password: {
-//     type: String,
-//     required: true,
-//   },
-//   company: {
-//     type: Schema.Types.ObjectId,
-//     ref: 'Company',
-//     required: true,
-//   },
-//   gender: {
-//     type: Number,
-//     enum: [0, 1],
-//     default: 0,
-//     required: true,
-//   },
-//   friends: [
-//     {
-//       type: String,
-//     },
-//   ],
-//   creditCards: {
-//     type: Map,
-//     of: string,
-//   },
-// })
+// Schema
+const RoomSchema = new Schema<RoomDocument, RoomModel>({
+  name: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  suites: [
+    {
+      type: String,
+    },
+  ],
+  currentMeasure: {
+    type: Number,
+    default: 0,
+  },
+})
 
-// enum Gender {
-//   Male = 1,
-//   Female = 0,
-// }
+export interface RoomType {
+  name: string
+  owner: Types.ObjectId | UserDocument
+  suites: Array<string>
+  currentMeasure?: number
+}
 
-// export interface User {
-//   firstName: string
-//   lastName?: string
-//   username: string
-//   password: string
-//   company: Types.ObjectId | Record<string, unknown>
-//   gender: Gender
-//   friends: Array<string>
-//   creditCards?: Map<string, string>
-// }
+interface RoomBaseDocument extends RoomType, Document {
+  suites: Types.Array<string>
+}
 
-// /**
-//  * Not directly exported because it is not recommanded to
-//  * use this interface direct unless necessary since the
-//  * type of `company` field is not deterministic
-//  */
-// interface UserBaseDocument extends User, Document {
-//   friends: Types.Array<string>
-//   creditCards?: Types.Map<string>
-//   fullName: string
-//   getGender(): string
-// }
+// Export this for strong typing
+export interface RoomDocument extends RoomBaseDocument {
+  owner: UserDocument['_id']
+}
 
-// // Export this for strong typing
-// export interface UserDocument extends UserBaseDocument {
-//   company: Company['_id']
-// }
+// Export this for strong typing
+export interface RoomPopulatedDocument extends RoomBaseDocument {
+  owner: UserDocument
+}
 
-// // Export this for strong typing
-// export interface UserPopulatedDocument extends UserBaseDocument {
-//   company: Company
-// }
+// For model
+export interface RoomModel extends Model<RoomDocument> {
+  findMyOwner(id: string): Promise<RoomPopulatedDocument>
+}
 
-// // Virtuals
-// UserSchema.virtual('fullName').get(function (this: UserBaseDocument) {
-//   return this.firstName + this.lastName
-// })
+// Static methods
+RoomSchema.statics.findMyOwner = async function (this: Model<RoomDocument>, id: string) {
+  return this.findById(id).populate('owner').exec()
+}
 
-// // Methods
-// UserSchema.methods.getGender = function (this: UserBaseDocument) {
-//   return this.gender > 0 ? 'Male' : 'Female'
-// }
-
-// // For model
-// export interface UserModel extends Model<UserDocument> {
-//   findMyCompany(id: string): Promise<UserPopulatedDocument>
-// }
-
-// // Static methods
-// UserSchema.statics.findMyCompany = async function (this: Model<UserDocument>, id: string) {
-//   return this.findById(id).populate('company').exec()
-// }
-
-// // Document middlewares
-// UserSchema.pre<UserDocument>('save', function (next) {
-//   if (this.isModified('password')) {
-//     this.password = hashPassword(this.password)
-//   }
-// })
-
-// // Query middlewares
-// UserSchema.post<Query<UserDocument, UserDocument>>('findOneAndUpdate', async function (doc) {
-//   await updateCompanyReference(doc)
-// })
-
-// // Default export
-// export default model<UserDocument, UserModel>('User', UserSchema)
+// Default export
+export default model<RoomDocument, RoomModel>('Room', RoomSchema)

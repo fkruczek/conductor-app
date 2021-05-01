@@ -1,8 +1,8 @@
 import config from 'config'
 import express from 'express'
-const router = express.Router()
-import User, { UserType } from 'models/user'
 import { OAuth2Client } from 'google-auth-library'
+import User, { UserType } from 'models/user'
+const router = express.Router()
 
 const CLIENT_ID = config.get<string>('googleClientId')
 const client = new OAuth2Client(CLIENT_ID)
@@ -22,14 +22,14 @@ router.post('/google', async (req, res) => {
 
     if (!googleUserPayload) throw new Error('Couldnt get user payload')
 
-    const { name, picture, email } = googleUserPayload
+    const { given_name, picture, email } = googleUserPayload
 
-    if (!name || !picture || !email) {
+    if (!given_name || !picture || !email) {
       return res.status(401).send('Google account incomplete')
     }
 
     const newUser: UserType = {
-      name,
+      name: given_name,
       picture,
       email,
     }

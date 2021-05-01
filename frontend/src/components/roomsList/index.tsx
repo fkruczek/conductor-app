@@ -1,7 +1,7 @@
-import React from 'react'
 import { Button } from 'components'
-import GoogleLogin from 'react-google-login'
 import { useAuthContext } from 'context/auth.context'
+import React from 'react'
+import GoogleLogin from 'react-google-login'
 import { Link } from 'react-router-dom'
 
 const MainSection = () => {

@@ -1,8 +1,8 @@
 import { LoginResponse } from 'models'
 import React, { createContext, ReactNode, useCallback, useEffect } from 'react'
 import { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login'
+import { api } from 'utils/apiClient'
 import { useAsync } from 'utils/useAsync'
-import http from 'utils/apiClient'
 
 if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
   throw new Error('REACT_APP_GOOGLE_CLIENT_ID is undefined!!!')
@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContext>({ user: null })
 AuthContext.displayName = 'AuthContext'
 
 const fetchUser = (token: string): Promise<LoginResponse> => {
-  return http.post('auth/google', { token }).then((res) => res.data)
+  return api.post('auth/google', { token }).then((res) => res.data)
 }
 
 const getUser = async (): Promise<LoginResponse | null> => {
