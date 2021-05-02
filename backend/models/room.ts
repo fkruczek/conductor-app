@@ -1,4 +1,4 @@
-import { Document, Model, model, Schema, Types } from 'mongoose'
+import { Document, model, Model, Schema, Types } from 'mongoose'
 import { UserDocument } from './user'
 
 // Schema
@@ -13,9 +13,9 @@ const RoomSchema = new Schema<RoomDocument, RoomModel>({
     ref: 'User',
     required: true,
   },
-  suites: [
+  suiteIds: [
     {
-      type: String,
+      type: Schema.Types.ObjectId,
     },
   ],
   currentMeasure: {
@@ -27,13 +27,11 @@ const RoomSchema = new Schema<RoomDocument, RoomModel>({
 export interface RoomType {
   name: string
   owner: Types.ObjectId | UserDocument
-  suites: Array<string>
+  suiteIds: Types.ObjectId[]
   currentMeasure?: number
 }
 
-interface RoomBaseDocument extends RoomType, Document {
-  suites: Types.Array<string>
-}
+interface RoomBaseDocument extends RoomType, Document {}
 
 // Export this for strong typing
 export interface RoomDocument extends RoomBaseDocument {
