@@ -1,46 +1,76 @@
 /** @jsxImportSource @emotion/react */
 // import { useForm } from 'react-hook-form'
+import { useRoomLobby } from 'api/rooms'
 import { Button } from 'components'
-import { useForm } from 'react-hook-form'
-import { useParams } from 'react-router-dom'
+import { Select } from 'components/form'
+import { RoomLobbyFormValue, RoomLobbyResponse } from 'models'
+import { useEffect } from 'react'
+import { useFieldArray, useForm } from 'react-hook-form'
+import { useHistory, useParams } from 'react-router-dom'
 import 'twin.macro'
 
-// import { RoomRequest } from 'src/models'
-// import { initSocket, createRoom } from 'src/sockets'
+// TODO: https://react-hook-form.com/advanced-usage/#SmartFormComponent
+// TODO: autoselect parts on reconnect from localstorage
+const LobbyForm = ({ data: { name, suites } }: { data: RoomLobbyResponse }) => {
+  const history = useHistory()
+  const { id } = useParams<{ id: string }>()
+
+  const { handleSubmit, control } = useForm<RoomLobbyFormValue>({
+    defaultValues: { parts: suites.map(() => ({ _id: '' })) },
+  })
+  const { fields } = useFieldArray({
+    control,
+    name: 'parts',
+  })
+
+  const onSubmit = handleSubmit(({ parts }) => {
+    // saving map of selected parts for each suite in localStorage
+    const partsChoice = new Map()
+    parts.forEach((part, index) => {
+      partsChoice.set(suites[index]._id, part._id)
+    })
+    localStorage.setItem('partsChoice', JSON.stringify(Array.from(partsChoice.entries())))
+
+    history.push('/concert/' + id)
+    // const fromls = localStorage.getItem('partsChoice')
+    // if (!fromls) return
+    // const map = new Map(JSON.parse(fromls))
+  })
+
+  return (
+    <form tw="justify-items-center grid gap-4 m-auto p-4 max-w-lg" onSubmit={onSubmit}>
+      <h1>Lobby</h1>
+      <span>You are in room: {name}</span>
+      {fields.map((field, index) => (
+        <Select
+          key={field.id}
+          control={control}
+          options={suites[index].parts}
+          label={suites[index].name}
+          name={`parts.${index}._id` as const}
+          rules={{ required: true }}
+        />
+      ))}
+      <Button type="submit">Ready</Button>
+    </form>
+  )
+}
 
 export const Lobby = () => {
   const { id } = useParams<{ id: string }>()
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm()
 
-  const onSubmit = handleSubmit((values) => console.log(values))
+  // TODO: if !id redirect to roomlist
+  const { data, error } = useRoomLobby(id)
+
+  useEffect(() => {
+    localStorage.setItem('currentRoomId', id)
+  }, [id])
+
+  if (error) return null
 
   return (
     <div tw="bg-gradient-to-b from-primary to-yellow-200 min-h-screen">
-      <form tw="justify-items-center grid gap-4 m-auto p-4 max-w-lg" onSubmit={onSubmit}>
-        <h1>Lobby</h1>
-        <span>You are in room: {id}</span>
-        <label htmlFor="pet-select">Choose a part:</label>
-        <select id="pet-select" {...register('pets', { required: true })}>
-          <option value="">--Please choose an option--</option>
-          <option value="dog">Dog</option>
-          <option value="cat">Cat</option>
-          <option value="hamster">Hamster</option>
-          <option value="parrot">Parrot</option>
-          <option value="spider">Spider</option>
-          <option value="goldfish">Goldfish</option>
-        </select>
-        <Button type="submit">Open score</Button>
-
-        {/* <form onSubmit={onSubmit}>
-          <label htmlFor="name">Concert name</label>
-          <input id="name" {...register('name')} />
-          {errors.name && <span>{errors.name.message}</span>}
-        </form> */}
-      </form>
+      {data ? <LobbyForm data={data} /> : null}
     </div>
   )
 }

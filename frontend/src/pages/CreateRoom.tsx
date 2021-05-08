@@ -2,8 +2,9 @@
 import { useCreateRoom } from 'api/rooms'
 import { useAuthContext } from 'context/auth.context'
 import { CreateRoomRequest } from 'models'
+import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { emitRoomCreated } from 'sockets'
 import 'twin.macro'
 
@@ -14,7 +15,21 @@ export const CreateRoom = () => {
     formState: { errors },
   } = useForm<CreateRoomRequest>()
   const { user } = useAuthContext()
-  const { create, isError, error } = useCreateRoom(() => emitRoomCreated(user!._id))
+  const history = useHistory()
+
+  const onSuccess = useCallback(
+    (roomId: string) => {
+      if (!user) {
+        return
+      }
+      emitRoomCreated(user._id)
+      history.push('/lobby/' + roomId)
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [user]
+  )
+
+  const { create, isError, error } = useCreateRoom(onSuccess)
   const onSubmit = handleSubmit((room) => create(room))
 
   if (!user) return null

@@ -1,9 +1,10 @@
+import { Header } from 'components/Header'
+import { Concert } from 'pages/Concert'
 import React from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
-import { RoomsList } from './pages/RoomsList'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { CreateRoom } from './pages/CreateRoom'
 import { Lobby } from './pages/Lobby'
-import { Header } from 'components/Header'
+import { RoomsList } from './pages/RoomsList'
 // import Score from './components/Score'
 
 // TODO: how it works?
@@ -19,20 +20,25 @@ import { Header } from 'components/Header'
 // TODO: Code splitting (rrd documentation)
 const App = () => (
   <>
-    <Header />
     <Switch>
-      <Route path="/create-concert">
-        <CreateRoom />
+      <Route exact path="/concert/:id">
+        <Concert />
       </Route>
-      <Route path="/lobby/:id">
-        <Lobby />
-      </Route>
-      <Route path="/">
-        <RoomsList />
-      </Route>
-      <Route>
-        <Redirect to="/" />
-      </Route>
+      <>
+        <Header />
+        <Route exact path="/create-concert">
+          <CreateRoom />
+        </Route>
+        <Route exact path="/lobby/:id">
+          <Lobby />
+        </Route>
+        <Route exact path="/">
+          <RoomsList />
+        </Route>
+        <Route>
+          <Redirect to="/" />
+        </Route>
+      </>
     </Switch>
   </>
 )

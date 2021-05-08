@@ -34,7 +34,7 @@ if (!process.env.REACT_APP_API_URL) {
   throw new Error('REACT_APP_API_URL is undefined!!!')
 }
 
-import { RoomResponse } from 'models'
+import { RoomListResponse } from 'models'
 import io, { Socket } from 'socket.io-client'
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events'
 let socket: Socket<DefaultEventsMap, DefaultEventsMap> | null = null
@@ -54,7 +54,6 @@ export const initSocket = () => {
 initSocket()
 
 export const emitRoomCreated = (userId: string) => {
-  console.log(userId)
   if (!socket) return
   socket.emit('rooms:created', { userId })
 }
@@ -70,12 +69,12 @@ export const unsubscribeToRoomsList = () => {
 }
 
 // TODO: unsubscribing not only disconnect
-type Callback = (whatever: null, rooms: RoomResponse[]) => void
+type Callback = (whatever: null, rooms: RoomListResponse[]) => void
 
 export const subscribeToRoomsList = (cb: Callback) => {
   if (!socket) return true // TODO: why return true???
 
-  socket.on('rooms:list', (rooms: RoomResponse[]) => {
+  socket.on('rooms:list', (rooms: RoomListResponse[]) => {
     return cb(null, rooms) // TODO: why not cb(msg)???
   })
 

@@ -2,7 +2,7 @@
 import { useRooms } from 'api/rooms'
 import { Button } from 'components'
 import { MainSection } from 'components/roomsList'
-import { RoomResponse } from 'models'
+import { RoomListResponse } from 'models'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import 'twin.macro'
@@ -11,7 +11,7 @@ import { subscribeToRoomsList, unsubscribeToRoomsList } from '../sockets/index'
 export const RoomsList = () => {
   const { data: rooms, setData: setRooms } = useRooms()
   useEffect(() => {
-    subscribeToRoomsList((err, rooms: RoomResponse[]) => {
+    subscribeToRoomsList((err, rooms: RoomListResponse[]) => {
       if (err) return
       setRooms(rooms)
     })

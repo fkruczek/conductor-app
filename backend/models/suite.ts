@@ -9,16 +9,11 @@ const suiteSchema = new Schema<SuiteDocument, SuiteModel>({
     required: true,
   },
   parts: [partSchema],
-  currentMeasure: {
-    type: Number,
-    default: 0,
-  },
 })
 
 export interface SuiteType {
   name: string
   parts: Array<PartType>
-  currentMeasure?: number
 }
 
 interface SuiteBaseDocument extends SuiteType, Document {

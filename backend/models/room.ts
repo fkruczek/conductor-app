@@ -13,29 +13,35 @@ const RoomSchema = new Schema<RoomDocument, RoomModel>({
     ref: 'User',
     required: true,
   },
-  suiteIds: [
+  suites: [
     {
       type: Schema.Types.ObjectId,
+      ref: 'Suite',
     },
   ],
   currentMeasure: {
     type: Number,
     default: 0,
   },
+  currentSuiteId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+  },
 })
 
 export interface RoomType {
   name: string
   owner: Types.ObjectId | UserDocument
-  suiteIds: Types.ObjectId[]
+  suites: Types.ObjectId[]
   currentMeasure?: number
+  currentSuiteId: Types.ObjectId
 }
 
 interface RoomBaseDocument extends RoomType, Document {}
 
 // Export this for strong typing
 export interface RoomDocument extends RoomBaseDocument {
-  owner: UserDocument['_id']
+  owner: Types.ObjectId
 }
 
 // Export this for strong typing
