@@ -1,5 +1,7 @@
 import { RoomConcertResponse, RoomListResponse, RoomLobbyResponse } from 'models'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { emitSuiteChange, subscribeToRoomConcert, unsubscribeToRoomConcert } from 'sockets'
 import { api } from 'utils/apiClient'
 import { useAsync } from 'utils/useAsync'
 import { CreateRoomRequest } from './../models/index'
@@ -54,13 +56,35 @@ const getRoomConcert = (id: string, parts: string | null) => {
     .then(({ data }) => data)
 }
 
-const useRoomConcert = (id: string, parts: string | null) => {
-  const { run, ...rest } = useAsync<RoomConcertResponse | undefined>(undefined)
+const useRoomConcert = () => {
+  const parts = localStorage.getItem('partsChoice')
+  // TODO: if !partChoice in localStorage then redirect to lobby
+
+  const { id } = useParams<{ id: string }>()
+  const { run, data } = useAsync<RoomConcertResponse | undefined>(undefined)
+
+  const [measure, setMeasure] = useState(0)
+
+  useEffect(() => {
+    subscribeToRoomConcert(id, {
+      onMeasureChange: (_, measure) => setMeasure(measure),
+      onSuiteChange: () => run(getRoomConcert(id, parts)),
+    })
+    return () => {
+      unsubscribeToRoomConcert(id)
+    }
+  }, [id, parts, run])
 
   useEffect(() => {
     run(getRoomConcert(id, parts))
   }, [id, run, parts])
-  return rest
+
+  if (!data) return null
+
+  // TODO: is this a good pattern?
+  const changeSuite = (suiteId: string) => emitSuiteChange(id, suiteId)
+
+  return { ...data, measure, changeSuite }
 }
 
 export { useRooms, useCreateRoom, useRoomLobby, useRoomConcert }

@@ -3,11 +3,7 @@
 import { useRoomConcert } from 'api/rooms'
 import { OptionType } from 'models'
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import 'twin.macro'
-
-// import { RoomRequest } from 'src/models'
-// import { initSocket, createRoom } from 'src/sockets'
 
 interface SuiteSelectProps {
   options: OptionType[]
@@ -30,20 +26,21 @@ const SuiteSelect = ({ options, onChange }: SuiteSelectProps) => {
 }
 
 export const Concert = () => {
-  const { id } = useParams<{ id: string }>()
-
-  const parts = localStorage.getItem('partsChoice')
-  // const map = new Map(JSON.parse(fromls))
-  const { data } = useRoomConcert(id, parts)
-  // if !partChoice in localStorage then redirect to lobby
-  if (!data) return null
+  const roomData = useRoomConcert()
+  console.log('render concert')
+  if (!roomData) return null
+  const { measure, isOwner, score, suites, changeSuite } = roomData
   return (
     <div tw="bg-gradient-to-b min-h-screen">
-      {data.score}
-      <SuiteSelect
-        options={data.suites}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => console.log(e.target.value)}
-      />
+      {score} {measure}
+      {isOwner && (
+        <>
+          <SuiteSelect
+            options={suites}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => changeSuite(e.target.value)}
+          />
+        </>
+      )}
     </div>
   )
 }
