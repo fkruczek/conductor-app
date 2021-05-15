@@ -1,29 +1,30 @@
 import express from 'express'
 // import Suite from 'models/suite'
 const router = express.Router()
-
 // const migrateSuites = async () => {
 //   await Suite.deleteMany()
 
 //   const one = new Suite({
-//     name: 'first suite',
+//     name: 'Canon in D',
 //     parts: [
-//       { musicXML: 'notesnviolinoteviolinsnotviolines', name: 'conductor' },
-//       { musicXML: 'conductornotespartsconductornotes', name: 'violin' },
-//       { musicXML: 'clarinetclarinetclarinetclarinet', name: 'clarinet' },
-//       { musicXML: 'violaviolaviolaviolaviola', name: 'viola' },
+//       { musicXML: 'asdf', name: 'Conductor' },
+//       { musicXML: 'violin', name: 'Violin 1' },
+//       { musicXML: 'clarinet', name: 'Violin 2' },
+//       { musicXML: 'viola', name: 'Violoncello' },
+//       { musicXML: 'viola', name: 'Piano' },
 //     ],
 //   })
 
 //   await one.save()
 
 //   const two = new Suite({
-//     name: 'second suite',
+//     name: 'Empty suite',
 //     parts: [
-//       { musicXML: 'second suite conductor sheet', name: 'conductor' },
-//       { musicXML: 'pianopianopianopianopianopiano', name: 'piano' },
+//       { musicXML: 'second suite conductor sheet', name: 'Conductor' },
+//       { musicXML: 'second suite piano sheet', name: 'piano' },
 //       { musicXML: 'contrabasscontrabasscontrabasscontrabasscontrabass', name: 'contrabass' },
 //       { musicXML: 'cimbalcimbalcimbalcimbalcimbal', name: 'cimbal' },
+//       { musicXML: 'cimbalcimbalcimbalcimbalcimbal', name: 'viola' },
 //     ],
 //   })
 

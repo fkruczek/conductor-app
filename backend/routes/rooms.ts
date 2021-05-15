@@ -33,7 +33,7 @@ router.get<{ id: string }, RoomDocument | any | string>('/:id/lobby', async (req
   const suitesWithConductorPartOnly = suites.map(({ _id, name, parts }) => ({
     _id,
     name,
-    parts: parts.filter(({ name }) => name === 'conductor'),
+    parts: parts.filter(({ name }) => name === 'Conductor'),
   }))
 
   const roomResponseForOwner = {
@@ -92,7 +92,7 @@ router.post<any, any, CreateRoomRequest>('/', isAuth, async (req, res) => {
   const newRoom: RoomType = {
     name: req.body.name,
     owner: Types.ObjectId(req.session.userId),
-    suites: [...suites.map((suite) => suite.id)],
+    suites: suites.map((suite) => suite.id),
     currentSuiteId: suites[0].id,
   }
 

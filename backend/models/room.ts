@@ -19,10 +19,6 @@ const RoomSchema = new Schema<RoomDocument, RoomModel>({
       ref: 'Suite',
     },
   ],
-  currentMeasure: {
-    type: Number,
-    default: 0,
-  },
   currentSuiteId: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -33,7 +29,6 @@ export interface RoomType {
   name: string
   owner: Types.ObjectId | UserDocument
   suites: Types.ObjectId[]
-  currentMeasure?: number
   currentSuiteId: Types.ObjectId
 }
 
