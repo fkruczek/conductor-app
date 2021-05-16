@@ -1,4 +1,4 @@
-import { RoomConcertResponse, RoomListResponse, RoomLobbyResponse } from 'models'
+import { RoomConcertResponse, RoomListResponse, RoomLobbyResponse, ScoreLocation } from 'models'
 import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { emitSuiteChange, subscribeToRoomConcert, unsubscribeToRoomConcert } from 'sockets'
@@ -63,12 +63,16 @@ const useRoomConcert = () => {
   const { id } = useParams<{ id: string }>()
   const { run, data } = useAsync<RoomConcertResponse | undefined>(undefined)
 
-  const [measure, setMeasure] = useState(0)
-
+  const [conductorLocation, setConductorLocation] = useState<ScoreLocation>({
+    conductorCurrentPage: 0,
+    conductorPages: [],
+  })
   useEffect(() => {
     subscribeToRoomConcert(id, {
-      onMeasureChange: (_, measure) => setMeasure(measure),
       onSuiteChange: () => run(getRoomConcert(id, parts)),
+      onConductorPageChange: (_, conductorLocation) => {
+        setConductorLocation(conductorLocation)
+      },
     })
     return () => {
       unsubscribeToRoomConcert(id)
@@ -84,7 +88,7 @@ const useRoomConcert = () => {
   // TODO: is this a good pattern?
   const changeSuite = (suiteId: string) => emitSuiteChange(id, suiteId)
 
-  return { ...data, measure, changeSuite }
+  return { ...data, conductorLocation, changeSuite }
 }
 
 export { useRooms, useCreateRoom, useRoomLobby, useRoomConcert }

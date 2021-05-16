@@ -45,3 +45,8 @@ export interface RoomConcertResponse {
   suites: OptionType[]
   score: string
 }
+
+export interface ScoreLocation {
+  conductorCurrentPage: number
+  conductorPages: number[]
+}

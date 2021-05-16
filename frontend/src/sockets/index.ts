@@ -1,42 +1,11 @@
-// import io, { Socket } from 'socket.io-client'
-// import { DefaultEventsMap } from 'socket.io-client/build/typed-events'
-// let socket: Socket<DefaultEventsMap, DefaultEventsMap>
-
-// export const initiateSocket = (room: string) => {
-//   socket = io('http://localhost:3000')
-//   console.log(`Connecting socket...`)
-//   if (socket && room) socket.emit('join', room)
-// }
-
-// export const disconnectSocket = () => {
-//   console.log('Disconnecting socket...')
-//   if (socket) socket.disconnect()
-// }
-
-// type Callback = (whatever: null, msg: string) => void
-
-// export const subscribeToChat = (cb: Callback) => {
-//   if (!socket) return true // TODO: why return true???
-//   socket.on('chat', (msg) => {
-//     console.log('Websocket event received!')
-//     return cb(null, msg) // TODO: why not cb(msg)???
-//   })
-//   return
-// }
-
-// // TODO: unsubscribing
-
-// export const sendMessage = (room: string, message: string) => {
-//   if (socket) socket.emit('chat', { message, room })
-// }
+import { RoomListResponse } from 'models'
+import io, { Socket } from 'socket.io-client'
+import { DefaultEventsMap } from 'socket.io-client/build/typed-events'
 
 if (!process.env.REACT_APP_API_URL) {
   throw new Error('REACT_APP_API_URL is undefined!!!')
 }
 
-import { RoomListResponse } from 'models'
-import io, { Socket } from 'socket.io-client'
-import { DefaultEventsMap } from 'socket.io-client/build/typed-events'
 let socket: Socket<DefaultEventsMap, DefaultEventsMap> | null = null
 
 const initSocket = () => {
@@ -82,14 +51,16 @@ export const subscribeToRoomsList = (cb: RoomListCallback) => {
   return
 }
 
+type ConductorPageChangeEvent = { conductorCurrentPage: number; conductorPages: number[] }
+
 export const subscribeToRoomConcert = (
   roomId: string,
   {
-    onMeasureChange,
+    onConductorPageChange,
     onSuiteChange,
   }: {
     onSuiteChange: () => void
-    onMeasureChange: (error: null, measureNumber: number) => void
+    onConductorPageChange: (error: null, value: ConductorPageChangeEvent) => void
   }
 ) => {
   if (!socket) return true
@@ -99,24 +70,31 @@ export const subscribeToRoomConcert = (
     return onSuiteChange()
   })
 
-  socket.on('concert:measure', (measureNumber: number) => {
-    return onMeasureChange(null, measureNumber)
+  socket.on('concert:page', (value: ConductorPageChangeEvent) => {
+    return onConductorPageChange(null, value)
   })
 
   return
 }
 
 export const emitSuiteChange = (roomId: string, suiteId: string) => {
-  if (!socket) return true
-
+  // TODO: for sure throw  error?
+  if (!socket) throw new Error('Socket is not initiated')
   socket.emit('concert:suite', { suiteId, roomId })
+}
 
-  return
+export const emitConductorPageChange = (value: ConductorPageChangeEvent) => {
+  // TODO: for sure throw  error?
+  if (!socket) throw new Error('Socket is not initiated')
+  console.log('emitting')
+  socket.emit('concert:page', value)
 }
 
 export const unsubscribeToRoomConcert = (roomId: string) => {
   if (!socket) return
-  socket.off('concert')
+  socket.off('concert:measure')
+  socket.off('concert:suite')
+  socket.off('concert:page')
   socket.emit('concert:leave', roomId)
   // TODO: include here concert:suite, concert:measure??
 }
