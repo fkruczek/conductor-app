@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 // import { useForm } from 'react-hook-form'
 import { useRoomConcert } from 'api/rooms'
-import Score from 'components/Score'
+import Score from 'components/score/score'
 import { OptionType } from 'models'
 import React from 'react'
 import 'twin.macro'

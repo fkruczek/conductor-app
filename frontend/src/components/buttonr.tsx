@@ -15,4 +15,4 @@ const Button = styled.button(({ isSmall }: ButtonProps) => [
   isSmall ? tw`text-sm` : tw`text-lg`,
 ])
 
-export default Button
+export { Button }

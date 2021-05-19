@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
+import { Button } from 'components/buttonr'
 import { ScoreLocation } from 'models'
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay'
-import { ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { emitConductorPageChange } from 'sockets'
 import 'twin.macro'
-import { Button } from '.'
+import { Loader } from './loader'
 
 interface ScoreProps {
   musicXML: string
@@ -30,29 +31,41 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
   }, [])
 
   useLayoutEffect(() => {
+    console.log('1')
     if (!divRef.current) return
     if (score) {
       score.load(musicXML).then(() => {
-        score.render()
-        score.cursor.show()
+        setIsLoading(true)
+        setTimeout(() => {
+          score.render()
+          score.cursor.show()
+          setIsLoading(false)
+        })
       })
       return
     }
+    console.log('2')
 
     const newScore = new OpenSheetMusicDisplay(divRef.current, {
       followCursor: false,
       autoResize: false,
       drawTitle: false,
     })
+    console.log('3')
     newScore.load(musicXML).then(() => {
+      console.log('4')
       // TODO: maybe put here rerenderScore()
-      newScore.setPageFormat(`${window.innerWidth}x${window.innerHeight}`)
-      newScore.render()
-      newScore.cursor.show()
-      setScore(newScore)
-      setTimeout(() => setIsLoading(false), 50)
+      setTimeout(() => {
+        newScore.setPageFormat(`${window.innerWidth}x${window.innerHeight}`)
+        newScore.render()
+        newScore.cursor.show()
+        setScore(newScore)
+        setIsLoading(false)
+      })
+      console.log('5')
     })
     // TODO: make a callback from get fn
+    console.log('6')
   }, [musicXML])
 
   function emitPageChange() {
@@ -123,10 +136,12 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
 
   function rerenderScore() {
     if (!score) return
+    setIsLoading(true)
     score.setPageFormat(`${window.innerWidth}x${window.innerHeight}`)
     goToBeggining()
     score.render()
     setShowRerender(false)
+    setIsLoading(false)
   }
 
   function handleConductorPageChange(conductorCurrentPage: number, conductorPages: number[]) {
@@ -148,7 +163,7 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
 
   return (
     <div tw="bg-yellow-50">
-      {isLoading && <span tw="absolute inset-0 bg-green-300 h-screen w-screen"></span>}
+      {isLoading && <Loader />}
       {showRerender && (
         <div tw="w-full fixed bottom-0 flex justify-center z-30">
           <Button tw="m-4" variant="primary" onClick={rerenderScore}>
@@ -166,7 +181,7 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
           </Button>
         </>
       )}
-      <div tw="w-auto overflow-hidden" ref={divRef} />
+      <div ref={divRef} />
     </div>
   )
 }

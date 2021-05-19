@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 // import { useForm } from 'react-hook-form'
 import { useRoomLobby } from 'api/rooms'
-import { Button } from 'components'
+import { Button } from 'components/buttonr'
 import { Select } from 'components/form'
 import { RoomLobbyFormValue, RoomLobbyResponse } from 'models'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useHistory, useParams } from 'react-router-dom'
 import 'twin.macro'

@@ -3,8 +3,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#FFAD1F',
+        primary: '#f5deb3',
         ribbon: '#0047ff',
+        'primary-transparent': '#f5deb3ad',
       },
     },
   },

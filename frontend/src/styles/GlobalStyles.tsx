@@ -9,6 +9,14 @@ const customStyles = css`
     font-family: sans-serif;
     overflow-x: hidden;
   }
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 `
 const GlobalStyles = () => (
   <>
