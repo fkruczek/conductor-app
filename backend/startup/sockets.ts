@@ -9,8 +9,6 @@ export default function (httpServer: HttpServer): void {
     // TODO: options (cors etc...)
     cors: {
       origin: 'http://localhost:3000',
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
-      allowedHeaders: ['my-custom-header'],
       credentials: true,
     },
   })

@@ -1,9 +1,8 @@
-import { Express } from 'express'
-import express from 'express'
-import suites from '../routes/suites'
-import rooms from '../routes/rooms'
-import auth from '../routes/auth'
 import cors from 'cors'
+import express, { Express } from 'express'
+import auth from '../routes/auth'
+import rooms from '../routes/rooms'
+import suites from '../routes/suites'
 
 export default function (app: Express): void {
   app.use(
