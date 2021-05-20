@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { useRooms } from 'api/rooms'
-import { Button } from 'components'
+import { Button, FullPageSpinner } from 'components'
 import { MainSection } from 'components/roomsList'
 import { RoomListResponse } from 'models'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import 'twin.macro'
 import { subscribeToRoomsList, unsubscribeToRoomsList } from '../sockets/index'
@@ -19,7 +19,7 @@ export const RoomsList = () => {
       unsubscribeToRoomsList()
     }
   }, [setRooms])
-  if (!rooms) return null
+  if (!rooms) return <FullPageSpinner />
 
   return (
     <div tw="bg-gradient-to-b from-primary to-white min-h-screen grid content-start">

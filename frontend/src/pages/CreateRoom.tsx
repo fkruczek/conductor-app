@@ -29,7 +29,7 @@ export const CreateRoom = () => {
     [user]
   )
 
-  const { create, isError, error } = useCreateRoom(onSuccess)
+  const { create, isError } = useCreateRoom(onSuccess)
   const onSubmit = handleSubmit((room) => create(room))
 
   if (!user) return null

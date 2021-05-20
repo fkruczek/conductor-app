@@ -27,7 +27,7 @@ function useAsync<T>(
   isIdle: boolean
   isError: boolean
   isSuccess: boolean
-  error: any
+  error: Error
   status: 'idle' | 'pending' | 'rejected' | 'resolved'
 } {
   const initialStateRef = React.useRef({
@@ -35,6 +35,7 @@ function useAsync<T>(
     ...initialState,
   })
   const [{ status, data, error }, setState] = React.useReducer(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (s: any, a: () => void) => ({ ...s, ...a }),
     initialStateRef.current
   )
@@ -62,7 +63,7 @@ function useAsync<T>(
           setData(data)
           return data
         },
-        (error: any) => {
+        (error: Error) => {
           setError(error)
           return Promise.reject(error)
         }

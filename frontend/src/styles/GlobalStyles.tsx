@@ -8,6 +8,7 @@ const customStyles = css`
     ${tw`antialiased m-0 min-h-screen`}
     font-family: sans-serif;
     overflow-x: hidden;
+    background: #fff5e3;
   }
   @keyframes spin {
     from {
@@ -18,10 +19,6 @@ const customStyles = css`
     }
   }
 `
-const GlobalStyles = () => (
-  <>
-    <Global styles={customStyles} />
-  </>
-)
+const GlobalStyles = () => <Global styles={customStyles} />
 
 export default GlobalStyles

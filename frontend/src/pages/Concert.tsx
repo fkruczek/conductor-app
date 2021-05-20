@@ -15,7 +15,7 @@ const SuiteSelect = ({ options, onChange }: SuiteSelectProps) => {
   return (
     <select
       onChange={onChange}
-      tw="fixed top-2 left-2 text-lg opacity-60 hocus:opacity-100 focus:outline-none transform duration-300"
+      tw="fixed top-2 right-2 text-xl md:text-2xl xl:text-3xl opacity-40 hocus:opacity-100 focus:outline-none transform duration-300"
     >
       {options.map(({ _id, name }) => (
         <option key={_id} value={_id}>
@@ -34,12 +34,10 @@ export const Concert = () => {
     <div tw="bg-gradient-to-b min-h-screen">
       <Score musicXML={score} conductorLocation={conductorLocation} isOwner={isOwner} />
       {isOwner && (
-        <>
-          <SuiteSelect
-            options={suites}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => changeSuite(e.target.value)}
-          />
-        </>
+        <SuiteSelect
+          options={suites}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => changeSuite(e.target.value)}
+        />
       )}
     </div>
   )

@@ -5,7 +5,7 @@ import 'twin.macro'
 const Spinner = () => {
   return (
     <div tw="h-20 w-20">
-      <svg tw="animate-spin mr-3 h-20 w-20 text-purple-600" fill="none" viewBox="0 0 24 24">
+      <svg tw="animate-spin mr-3 h-20 w-20 text-field" fill="none" viewBox="0 0 24 24">
         <circle
           tw="opacity-25"
           cx="12"
@@ -26,7 +26,7 @@ const Spinner = () => {
 
 const FullPageSpinner = () => {
   return (
-    <div tw="absolute h-screen w-screen bg-yellow-700">
+    <div tw="fixed inset-0 w-screen flex place-items-center justify-center h-screen">
       <Spinner />
     </div>
   )

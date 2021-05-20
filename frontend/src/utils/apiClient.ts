@@ -9,12 +9,12 @@ axios.defaults.withCredentials = true
 axios.interceptors.response.use(undefined, (error) => {
   const expectedError =
     error.response && error.response.status >= 400 && error.response.status < 500
-  if (error.response.status === 401) {
+
+  if (!expectedError || error.response.status === 401) {
     // TODO: better logout
+    window.localStorage.removeItem('partsChoice')
+    window.localStorage.removeItem('currentRoomId')
     window.localStorage.removeItem('__google_auth_token__')
-  }
-  if (!expectedError) {
-    console.error('An unexpected error ccurred.')
   }
   return Promise.reject(error)
 })

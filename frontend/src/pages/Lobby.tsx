@@ -15,7 +15,7 @@ const LobbyForm = ({ data: { name, suites } }: { data: RoomLobbyResponse }) => {
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
 
-  const { handleSubmit, control } = useForm<RoomLobbyFormValue>({
+  const { handleSubmit, register, control } = useForm<RoomLobbyFormValue>({
     defaultValues: { parts: suites.map(() => ({ _id: '' })) },
   })
   const { fields } = useFieldArray({
@@ -44,11 +44,9 @@ const LobbyForm = ({ data: { name, suites } }: { data: RoomLobbyResponse }) => {
       {fields.map((field, index) => (
         <Select
           key={field.id}
-          control={control}
+          {...register(`parts.${index}._id` as const, { required: true })}
           options={suites[index].parts}
           label={suites[index].name}
-          name={`parts.${index}._id` as const}
-          rules={{ required: true }}
         />
       ))}
       <Button type="submit">Ready</Button>
