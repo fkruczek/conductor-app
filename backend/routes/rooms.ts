@@ -39,6 +39,7 @@ router.get<{ id: string }, RoomDocument | any | string>('/:id/lobby', async (req
   const roomResponseForOwner = {
     name: name,
     suites: suitesWithConductorPartOnly,
+    isOwner: true,
   }
 
   return res.send(roomResponseForOwner)

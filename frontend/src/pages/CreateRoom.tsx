@@ -1,10 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { useCreateRoom } from 'api/rooms'
-import { useAuthContext } from 'context/auth.context'
+import { Button } from 'components/button'
+import { Input } from 'components/form'
+import { Title } from 'components/layout'
+import { useAuthContext } from 'context/authContext'
 import { CreateRoomRequest } from 'models'
-import { useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { emitRoomCreated } from 'sockets'
 import 'twin.macro'
 
@@ -35,18 +38,18 @@ export const CreateRoom = () => {
   if (!user) return null
 
   return (
-    <div tw="justify-items-center grid gap-4 m-auto p-4 max-w-lg">
-      <form onSubmit={onSubmit}>
-        <label htmlFor="name">Concert name: </label>
-        <input id="name" {...register('name')} />
-        <button type="submit">Create room</button>
+    <div tw="grid gap-4 m-auto mt-6 p-4 max-w-lg">
+      <Title>Create concert</Title>
+
+      <form onSubmit={onSubmit} tw="grid gap-4">
+        <Input label="Concert name" {...register('name')} />
+        <Button type="submit" tw="m-auto mt-4">
+          Create concert
+        </Button>
         {errors.name && <span>{errors.name.message}</span>}
       </form>
       <hr />
       {isError && <span>Something whent wrong!</span>}
-      <Link to="/" tw="bg-white p-4 m-auto hocus:bg-gray-200">
-        Concerts list
-      </Link>
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { ScoreLocation } from 'models'
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay'
 import React, { ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { emitConductorPageChange } from 'sockets'
-import { RerenderButton, ScoreNavigationButtons } from './controls'
+import { RerenderButton, ScoreNavigation } from './controls'
 import { Loader } from './loader'
 
 interface ScoreProps {
@@ -14,7 +14,6 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
   const [score, setScore] = useState<OpenSheetMusicDisplay>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [showRerender, setShowRerender] = useState(false)
-  const [myCurrentPage, setMyCurrentPage] = useState(0)
   const divRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -65,15 +64,12 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
 
   function emitPageChange() {
     emitConductorPageChange({
-      conductorCurrentPage: myCurrentPage,
+      conductorCurrentPage: getMyCurrentPage(),
       conductorPages: getMyPagesArray(),
     })
   }
 
   function goToMeasure(targetMeasure: number) {
-    if (isOwner) {
-      emitPageChange()
-    }
     // in case we want to go back
     score?.cursor.reset()
     while (getCurrentMeasureNumber() < targetMeasure) {
@@ -83,23 +79,27 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
       window.scrollTo(0, 0)
       return
     }
+
+    // emitting AFTER setting cursor
+    if (isOwner) {
+      emitPageChange()
+    }
     scrollToCursor()
   }
 
   function scrollToCursor() {
     const diffToBar = score?.cursor.cursorElement.getBoundingClientRect().top ?? 0
-
     window.scrollBy({
       // TODO: calculate "top" in different way
-      top: diffToBar - 40,
+      // Eventually it has to be the top border of current cursor measure (is it posible?)
+      top: diffToBar - 50,
       behavior: 'smooth',
     })
   }
 
   function goToPage(pageNumber: number) {
-    const musicPage = score?.GraphicSheet.MusicPages[pageNumber]
+    const musicPage = score?.GraphicSheet.MusicPages[pageNumber - 1]
     if (musicPage) {
-      setMyCurrentPage(pageNumber)
       const firstMeasureOfGivenPage =
         musicPage.MusicSystems[0].GraphicalMeasures[0][0].MeasureNumber
       goToMeasure(firstMeasureOfGivenPage)
@@ -112,12 +112,16 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
   }
 
   function goToBeggining() {
-    setMyCurrentPage(0)
-    goToMeasure(0)
+    goToMeasure(1)
+  }
+
+  function getMyCurrentPage() {
+    if (!score) return 0
+    return score.cursor.currentPageNumber
   }
 
   function goToNextPage() {
-    goToPage(myCurrentPage + 1)
+    goToPage(getMyCurrentPage() + 1)
   }
 
   function getMyPagesArray() {
@@ -142,11 +146,12 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
   }
 
   function handleConductorPageChange(conductorCurrentPage: number, conductorPages: number[]) {
+    console.log(conductorCurrentPage, conductorPages)
     let myPage = 0
     const myPagesArray = getMyPagesArray()
 
-    const firstConductorMeasure = conductorPages[conductorCurrentPage + 1]
-    const lastConductorMeasure = conductorPages[conductorCurrentPage + 2] - 1 ?? null
+    const firstConductorMeasure = conductorPages[conductorCurrentPage - 1]
+    const lastConductorMeasure = conductorPages[conductorCurrentPage] - 1 ?? null
     if (!firstConductorMeasure || !lastConductorMeasure) return
 
     while (firstConductorMeasure >= myPagesArray[myPage]) myPage++
@@ -162,9 +167,7 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
     <>
       {isLoading && <Loader />}
       {showRerender && <RerenderButton onClick={rerenderScore} />}
-      {isOwner && (
-        <ScoreNavigationButtons onGoToBeggining={goToBeggining} onGoToNextPage={goToNextPage} />
-      )}
+      {isOwner && <ScoreNavigation onGoToBeggining={goToBeggining} onGoToNextPage={goToNextPage} />}
       <div ref={divRef} />
     </>
   )

@@ -1,17 +1,19 @@
 /** @jsxImportSource @emotion/react */
 // import { useForm } from 'react-hook-form'
 import { useRoomLobby } from 'api/rooms'
-import { Button } from 'components/buttonr'
+import { Button } from 'components/button'
 import { Select } from 'components/form'
+import { Title } from 'components/layout'
 import { RoomLobbyFormValue, RoomLobbyResponse } from 'models'
 import React, { useEffect } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
+import { FaTrash } from 'react-icons/fa'
 import { useHistory, useParams } from 'react-router-dom'
 import 'twin.macro'
 
 // TODO: https://react-hook-form.com/advanced-usage/#SmartFormComponent
 // TODO: autoselect parts on reconnect from localstorage
-const LobbyForm = ({ data: { name, suites } }: { data: RoomLobbyResponse }) => {
+const LobbyForm = ({ data: { name, suites, isOwner } }: { data: RoomLobbyResponse }) => {
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
 
@@ -38,8 +40,8 @@ const LobbyForm = ({ data: { name, suites } }: { data: RoomLobbyResponse }) => {
   })
 
   return (
-    <form tw="justify-items-center grid gap-4 m-auto p-4 max-w-lg" onSubmit={onSubmit}>
-      <h1>Lobby</h1>
+    <form tw="grid gap-4 m-auto p-4 max-w-lg" onSubmit={onSubmit}>
+      <Title>Lobby</Title>
       <span>You are in room: {name}</span>
       {fields.map((field, index) => (
         <Select
@@ -49,7 +51,17 @@ const LobbyForm = ({ data: { name, suites } }: { data: RoomLobbyResponse }) => {
           label={suites[index].name}
         />
       ))}
-      <Button type="submit">Ready</Button>
+      <div tw="m-auto grid gap-4 grid-flow-col">
+        {isOwner && (
+          <Button tw="m-auto mt-4 bg-red-900 grid grid-flow-col gap-2 items-center" type="submit">
+            <FaTrash />
+            Delete concert
+          </Button>
+        )}
+        <Button tw="m-auto mt-4" type="submit">
+          Ready
+        </Button>
+      </div>
     </form>
   )
 }
@@ -66,9 +78,5 @@ export const Lobby = () => {
 
   if (error) return null
 
-  return (
-    <div tw="bg-gradient-to-b from-primary to-yellow-200 min-h-screen">
-      {data ? <LobbyForm data={data} /> : null}
-    </div>
-  )
+  return <div tw="min-h-screen">{data ? <LobbyForm data={data} /> : null}</div>
 }

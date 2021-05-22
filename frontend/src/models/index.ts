@@ -17,6 +17,7 @@ export interface RoomLobbyResponse {
   _id: string
   name: string
   suites: LobbySuite[]
+  isOwner: undefined | true
 }
 
 export interface RoomListResponse {

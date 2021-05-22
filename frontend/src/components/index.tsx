@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export * from './buttonr'
+export * from './button'
 export * from './form'
 export * from './spinner'
 

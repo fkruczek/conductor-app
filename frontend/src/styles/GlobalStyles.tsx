@@ -9,6 +9,7 @@ const customStyles = css`
     font-family: sans-serif;
     overflow-x: hidden;
     background: #fff5e3;
+    color: #31291b;
   }
   @keyframes spin {
     from {

@@ -3,11 +3,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#f5deb3',
-        field: '#edd2a6',
+        primary: '#c5af86',
+        secondary: '#4f4754',
+        field: '#e8e6d9',
         button: '#433a29',
         ribbon: '#0047ff',
         'primary-transparent': '#f5deb3ad',
+        background: '#fff5e3',
       },
     },
   },

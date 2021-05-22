@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { useRooms } from 'api/rooms'
-import { Button, FullPageSpinner } from 'components'
+import { FullPageSpinner, LinkButton } from 'components'
+import { Title } from 'components/layout'
 import { MainSection } from 'components/roomsList'
 import { RoomListResponse } from 'models'
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import 'twin.macro'
 import { subscribeToRoomsList, unsubscribeToRoomsList } from '../sockets/index'
 
-export const RoomsList = () => {
+export const RoomList = () => {
   const { data: rooms, setData: setRooms } = useRooms()
   useEffect(() => {
     subscribeToRoomsList((err, rooms: RoomListResponse[]) => {
@@ -22,14 +22,14 @@ export const RoomsList = () => {
   if (!rooms) return <FullPageSpinner />
 
   return (
-    <div tw="bg-gradient-to-b from-primary to-white min-h-screen grid content-start">
+    <div tw="bg-gradient-to-b from-background to-primary min-h-screen grid content-start">
       <div tw="grid m-auto p-4 max-w-lg mt-10 justify-items-center gap-2">
         <MainSection />
-        <h1 tw="text-4xl">{rooms.length ? 'Concerts:' : 'Currently no concerts...'}</h1>
+        <Title>{rooms.length ? 'Concerts:' : 'Currently no concerts...'}</Title>
         {rooms.map(({ _id, name }) => (
-          <Link to={`lobby/${_id}`} key={_id}>
-            <Button>{name}</Button>
-          </Link>
+          <LinkButton to={`lobby/${_id}`} key={_id} tw="bg-button text-base">
+            {name}
+          </LinkButton>
         ))}
       </div>
     </div>

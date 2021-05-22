@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { useAuthContext } from 'context/auth.context'
+import { useAuthContext } from 'context/authContext'
 import React from 'react'
 import 'twin.macro'
 
 export const Header = () => {
   const { user } = useAuthContext()
   return (
-    <nav tw="bg-primary h-14 px-4 flex justify-end items-center text-2xl capitalize">
+    <nav tw="h-14 px-4 flex justify-end items-center text-2xl capitalize">
       {user ? (
         <>
           {user.name}

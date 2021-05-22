@@ -1,18 +1,14 @@
-import { Button } from 'components'
-import { useAuthContext } from 'context/auth.context'
+import { LinkButton } from 'components/button'
+import { useAuthContext } from 'context/authContext'
 import React from 'react'
 import GoogleLogin from 'react-google-login'
-import { Link } from 'react-router-dom'
-
 const MainSection = () => {
   const { handleLoginSuccess, handleLoginFailure, user } = useAuthContext()
 
   return (
-    <div>
+    <>
       {user ? (
-        <Link to="/create-concert">
-          <Button>Create concert</Button>
-        </Link>
+        <LinkButton to="/create-concert">Create concert</LinkButton>
       ) : (
         <GoogleLogin
           clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
@@ -20,11 +16,10 @@ const MainSection = () => {
           onSuccess={handleLoginSuccess}
           onFailure={handleLoginFailure}
           cookiePolicy={'single_host_origin'}
-          tw="w-48 m-auto"
           accessType="offline"
         />
       )}
-    </div>
+    </>
   )
 }
 
