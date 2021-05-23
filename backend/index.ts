@@ -1,12 +1,11 @@
+import config from 'config'
 import express from 'express'
+import { createServer } from 'http'
 import checkEnv from './startup/checkEnv'
 import db from './startup/db'
+import redis from './startup/redis'
 import routes from './startup/routes'
 import sockets from './startup/sockets'
-import config from 'config'
-import redis from './startup/redis'
-
-import { createServer } from 'http'
 
 const app = express()
 const httpServer = createServer(app)
@@ -17,4 +16,4 @@ redis(app)
 routes(app)
 sockets(httpServer)
 
-httpServer.listen(config.get('port'), () => console.log('Server has started...'))
+httpServer.listen(config.get('port'), () => console.log('✅ Server has started...'))

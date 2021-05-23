@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 // import { useForm } from 'react-hook-form'
-import { useRoomLobby } from 'api/rooms'
+import { deleteRoom, useRoomLobby } from 'api/rooms'
 import { Button } from 'components/button'
 import { Select } from 'components/form'
 import { Title } from 'components/layout'
+import { useAuthContext } from 'context/authContext'
 import { RoomLobbyFormValue, RoomLobbyResponse } from 'models'
 import React, { useEffect } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -11,9 +12,39 @@ import { FaTrash } from 'react-icons/fa'
 import { useHistory, useParams } from 'react-router-dom'
 import 'twin.macro'
 
+const LobbyOwnerSection = () => {
+  const history = useHistory()
+  const { user, setData } = useAuthContext()
+  if (!user) return null
+
+  const handleDeleteRoom = () => {
+    // TODO: turn on loader
+
+    deleteRoom().then(() => {
+      history.push('/')
+      setData({ ...user, ownedRoom: null })
+    })
+  }
+
+  return (
+    <div>
+      <hr tw="mt-20 mb-5" />
+      <span>Delete this concert to create new:</span>
+      <Button
+        tw="mt-4 bg-red-900 grid grid-flow-col gap-2 items-center"
+        type="button"
+        onClick={handleDeleteRoom}
+      >
+        <FaTrash />
+        Delete concert
+      </Button>
+    </div>
+  )
+}
+
 // TODO: https://react-hook-form.com/advanced-usage/#SmartFormComponent
 // TODO: autoselect parts on reconnect from localstorage
-const LobbyForm = ({ data: { name, suites, isOwner } }: { data: RoomLobbyResponse }) => {
+const LobbyForm = ({ data: { name, suites } }: { data: RoomLobbyResponse }) => {
   const history = useHistory()
   const { id } = useParams<{ id: string }>()
 
@@ -34,15 +65,13 @@ const LobbyForm = ({ data: { name, suites, isOwner } }: { data: RoomLobbyRespons
     localStorage.setItem('partsChoice', JSON.stringify(Array.from(partsChoice.entries())))
 
     history.push('/concert/' + id)
-    // const fromls = localStorage.getItem('partsChoice')
-    // if (!fromls) return
-    // const map = new Map(JSON.parse(fromls))
   })
 
   return (
-    <form tw="grid gap-4 m-auto p-4 max-w-lg" onSubmit={onSubmit}>
+    <form tw="grid gap-4" onSubmit={onSubmit}>
       <Title>Lobby</Title>
-      <span>You are in room: {name}</span>
+      <span tw="text-4xl italic">Concert: {name}</span>
+      <span tw="text-lg">Choose your part for each piece:</span>
       {fields.map((field, index) => (
         <Select
           key={field.id}
@@ -51,17 +80,9 @@ const LobbyForm = ({ data: { name, suites, isOwner } }: { data: RoomLobbyRespons
           label={suites[index].name}
         />
       ))}
-      <div tw="m-auto grid gap-4 grid-flow-col">
-        {isOwner && (
-          <Button tw="m-auto mt-4 bg-red-900 grid grid-flow-col gap-2 items-center" type="submit">
-            <FaTrash />
-            Delete concert
-          </Button>
-        )}
-        <Button tw="m-auto mt-4" type="submit">
-          Ready
-        </Button>
-      </div>
+      <Button tw="m-auto mt-4" type="submit">
+        Ready!
+      </Button>
     </form>
   )
 }
@@ -76,7 +97,12 @@ export const Lobby = () => {
     localStorage.setItem('currentRoomId', id)
   }, [id])
 
-  if (error) return null
+  if (error || !data) return null
 
-  return <div tw="min-h-screen">{data ? <LobbyForm data={data} /> : null}</div>
+  return (
+    <div tw="p-4 max-w-xl m-auto">
+      <LobbyForm data={data} />
+      {data.isOwner && <LobbyOwnerSection />}
+    </div>
+  )
 }

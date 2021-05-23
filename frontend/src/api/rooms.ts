@@ -20,13 +20,13 @@ const useRooms = () => {
   return rest
 }
 
-const createRoom = (room: CreateRoomRequest, onSuccess: (res: string) => void) =>
+const createRoom = (room: CreateRoomRequest, onSuccess: (res: RoomListResponse) => void) =>
   api.post('rooms', room).then(({ data }) => {
     onSuccess(data)
     return data
   })
 
-const useCreateRoom = (onSuccess: (res: string) => void) => {
+const useCreateRoom = (onSuccess: (res: RoomListResponse) => void) => {
   const { run, ...rest } = useAsync<void>(undefined)
 
   const create = useCallback((room: CreateRoomRequest) => run(createRoom(room, onSuccess)), [
@@ -67,6 +67,7 @@ const useRoomConcert = () => {
     conductorCurrentPage: 0,
     conductorPages: [],
   })
+
   useEffect(() => {
     subscribeToRoomConcert(id, {
       onSuiteChange: () => run(getRoomConcert(id, parts)),
@@ -91,4 +92,8 @@ const useRoomConcert = () => {
   return { ...data, conductorLocation, changeSuite }
 }
 
-export { useRooms, useCreateRoom, useRoomLobby, useRoomConcert }
+const deleteRoom = () => {
+  return api.delete('rooms')
+}
+
+export { useRooms, useCreateRoom, useRoomLobby, useRoomConcert, deleteRoom }

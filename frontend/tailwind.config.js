@@ -11,6 +11,9 @@ module.exports = {
         'primary-transparent': '#f5deb3ad',
         background: '#fff5e3',
       },
+      spacing: {
+        'min-h-navscreen': 'calc(100vh - 56px)',
+      },
     },
   },
   plugins: [],

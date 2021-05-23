@@ -4,7 +4,7 @@ import { Button } from 'components/button'
 import { Input } from 'components/form'
 import { Title } from 'components/layout'
 import { useAuthContext } from 'context/authContext'
-import { CreateRoomRequest } from 'models'
+import { CreateRoomRequest, RoomListResponse } from 'models'
 import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
@@ -17,16 +17,18 @@ export const CreateRoom = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<CreateRoomRequest>()
-  const { user } = useAuthContext()
+  const { user, setData } = useAuthContext()
   const history = useHistory()
 
   const onSuccess = useCallback(
-    (roomId: string) => {
+    ({ _id, name }: RoomListResponse) => {
       if (!user) {
         return
       }
-      emitRoomCreated(user._id)
-      history.push('/lobby/' + roomId)
+      setData({ ...user, ownedRoom: { _id, name } })
+
+      emitRoomCreated(user.id)
+      history.push('/lobby/' + _id)
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [user]
@@ -35,14 +37,17 @@ export const CreateRoom = () => {
   const { create, isError } = useCreateRoom(onSuccess)
   const onSubmit = handleSubmit((room) => create(room))
 
-  if (!user) return null
+  if (!user || user.ownedRoom) {
+    history.push('/')
+    return null
+  }
 
   return (
     <div tw="grid gap-4 m-auto mt-6 p-4 max-w-lg">
       <Title>Create concert</Title>
 
       <form onSubmit={onSubmit} tw="grid gap-4">
-        <Input label="Concert name" {...register('name')} />
+        <Input label="Concert name" {...register('name', { required: true })} />
         <Button type="submit" tw="m-auto mt-4">
           Create concert
         </Button>

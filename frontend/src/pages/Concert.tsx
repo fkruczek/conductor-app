@@ -1,40 +1,21 @@
 /** @jsxImportSource @emotion/react */
 // import { useForm } from 'react-hook-form'
 import { useRoomConcert } from 'api/rooms'
+import { ScoreSelect } from 'components/controls'
 import Score from 'components/score/score'
-import { OptionType } from 'models'
 import React from 'react'
 import 'twin.macro'
-
-interface SuiteSelectProps {
-  options: OptionType[]
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => unknown
-}
-
-const SuiteSelect = ({ options, onChange }: SuiteSelectProps) => {
-  return (
-    <select
-      onChange={onChange}
-      tw="fixed top-2 right-2 text-xl md:text-2xl xl:text-3xl opacity-40 hocus:opacity-100 focus:outline-none transform duration-300"
-    >
-      {options.map(({ _id, name }) => (
-        <option key={_id} value={_id}>
-          {name}
-        </option>
-      ))}
-    </select>
-  )
-}
 
 export const Concert = () => {
   const roomData = useRoomConcert()
   if (!roomData) return null
   const { isOwner, score, suites, changeSuite, conductorLocation } = roomData
   return (
-    <div tw="bg-gradient-to-b min-h-screen">
+    <div tw="min-h-screen">
       <Score musicXML={score} conductorLocation={conductorLocation} isOwner={isOwner} />
       {isOwner && (
-        <SuiteSelect
+        <ScoreSelect
+          tw="top-2 right-2"
           options={suites}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => changeSuite(e.target.value)}
         />

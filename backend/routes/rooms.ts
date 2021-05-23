@@ -87,6 +87,9 @@ router.get<void, RoomDocument[]>('/', async (_, res) => {
 })
 
 router.post<any, any, CreateRoomRequest>('/', isAuth, async (req, res) => {
+  const roomInDb = await Room.findOne({ owner: req.session.userId })
+  if (roomInDb) return res.status(400).send('You have already created one room')
+
   // TODO: allow user to chose suites for room
   const suites = await Suite.find()
 
@@ -98,10 +101,23 @@ router.post<any, any, CreateRoomRequest>('/', isAuth, async (req, res) => {
   }
 
   const room = new Room(newRoom)
-  // TODO: check if room with same userID exists
   try {
-    await room.save()
-    return res.status(200).send(room._id)
+    const { _id, name } = await room.save()
+    return res.status(200).send({ _id, name })
+  } catch (ex) {
+    return res.status(400).send(ex)
+  }
+})
+
+router.delete('/', isAuth, async (req, res) => {
+  try {
+    const room = await Room.findOneAndDelete({ owner: req.session.userId })
+
+    if (!room) {
+      return res.status(404).send('Room doesnt exists')
+    }
+
+    return res.status(200).send(room.id)
   } catch (ex) {
     return res.status(400).send(ex)
   }

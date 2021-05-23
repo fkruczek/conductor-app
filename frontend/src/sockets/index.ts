@@ -86,8 +86,13 @@ export const emitSuiteChange = (roomId: string, suiteId: string) => {
 export const emitConductorPageChange = (value: ConductorPageChangeEvent) => {
   // TODO: for sure throw  error?
   if (!socket) throw new Error('Socket is not initiated')
-  console.log('emitting')
   socket.emit('concert:page', value)
+}
+
+export const emitConductorStartingMeasure = (measureNumber: number) => {
+  // TODO: for sure throw  error?
+  if (!socket) throw new Error('Socket is not initiated')
+  socket.emit('concert:startingMeasure', measureNumber)
 }
 
 export const unsubscribeToRoomConcert = (roomId: string) => {

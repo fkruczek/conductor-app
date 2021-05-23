@@ -10,6 +10,7 @@ if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
 
 interface AuthContext {
   user: LoginResponse | null
+  setData: (data: LoginResponse) => void
   handleLoginSuccess?: (response: GoogleLoginResponse | GoogleLoginResponseOffline) => void
   handleLogoutSuccess?: () => Promise<void>
   handleLoginFailure?: () => void
@@ -17,7 +18,7 @@ interface AuthContext {
 
 const localStorageKey = '__google_auth_token__'
 
-const AuthContext = createContext<AuthContext>({ user: null })
+const AuthContext = createContext<AuthContext>({ user: null, setData: () => null })
 AuthContext.displayName = 'AuthContext'
 
 const fetchUser = (token: string): Promise<LoginResponse> => {
@@ -59,8 +60,8 @@ const AuthProvider = (props: { children: ReactNode }) => {
     run(getUser())
   }, [run])
   const value = React.useMemo(
-    () => ({ user, handleLoginSuccess, handleLogoutSuccess, isIdle, isLoading }),
-    [handleLoginSuccess, handleLogoutSuccess, user, isIdle, isLoading]
+    () => ({ user, setData, handleLoginSuccess, handleLogoutSuccess, isIdle, isLoading }),
+    [handleLoginSuccess, handleLogoutSuccess, user, isIdle, isLoading, setData]
   )
 
   // TODO: add spinner, error returns?

@@ -8,10 +8,10 @@ export const Header = () => {
   return (
     <nav tw="h-14 px-4 flex justify-end items-center text-2xl capitalize">
       {user ? (
-        <>
+        <div tw="flex items-center">
           {user.name}
           <img tw="ml-4 h-12 w-12 rounded-full bg-white text-xs" src={user.picture} alt="avatar" />
-        </>
+        </div>
       ) : null}
     </nav>
   )

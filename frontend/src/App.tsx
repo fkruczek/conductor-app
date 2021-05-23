@@ -1,4 +1,4 @@
-import { Header } from 'components/headerr'
+import { Header } from 'components/header'
 import { Concert } from 'pages/Concert'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'

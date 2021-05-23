@@ -1,3 +1,6 @@
+/* eslint-disable prettier/prettier */
+import { RoomDocument } from 'models/room';
+
 export interface CreateRoomRequest {
   name: string
 }
@@ -11,5 +14,6 @@ export interface LoginResponse {
   email: string
   name: string
   picture: string
-  _id: string
+  id: string
+  ownedRoom: RoomDocument | null
 }

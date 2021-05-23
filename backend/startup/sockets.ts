@@ -35,6 +35,7 @@ export default function (httpServer: HttpServer): void {
     socket: Socket<DefaultEventsMap, DefaultEventsMap>
   ) => {
     const handleRoomCreated = async ({ userId }: { userId: string }) => {
+      // TODO: why userId is in request? can i get it form context?
       if (!userId) return
 
       // rooms are named by owner's userId
@@ -50,7 +51,6 @@ export default function (httpServer: HttpServer): void {
     }
 
     const handleConcertSuite = async ({ roomId, suiteId }: { roomId: string; suiteId: string }) => {
-      console.log(suiteId)
       // TODO: validation (room exists? suite exists?)
       await Room.findByIdAndUpdate(roomId, { currentSuiteId: suiteId })
 
@@ -68,9 +68,17 @@ export default function (httpServer: HttpServer): void {
       socket.to(roomId).emit('concert:page', values)
     }
 
+    const handleConcertStartingMeasure = (measureNumber: number) => {
+      const roomId = getLastValue(socket.rooms)
+      if (!roomId) return
+      socket.to(roomId).emit('concert:page', { startingMeasure: measureNumber })
+    }
+
     socket.on('rooms:created', handleRoomCreated)
     socket.on('concert:join', handleConcertJoin)
     socket.on('concert:suite', handleConcertSuite)
+    // TODO: change page to location
     socket.on('concert:page', handleConcertPage)
+    socket.on('concert:startingMeasure', handleConcertStartingMeasure)
   }
 }

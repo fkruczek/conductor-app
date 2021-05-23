@@ -29,7 +29,8 @@ export interface LoginResponse {
   email: string
   name: string
   picture: string
-  _id: string
+  id: string
+  ownedRoom: RoomListResponse | null
 }
 
 export interface OptionType {
@@ -50,4 +51,5 @@ export interface RoomConcertResponse {
 export interface ScoreLocation {
   conductorCurrentPage: number
   conductorPages: number[]
+  startingMeasure?: number
 }

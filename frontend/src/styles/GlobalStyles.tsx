@@ -11,6 +11,7 @@ const customStyles = css`
     background: #fff5e3;
     color: #31291b;
   }
+
   @keyframes spin {
     from {
       transform: rotate(0deg);
@@ -18,6 +19,13 @@ const customStyles = css`
     to {
       transform: rotate(360deg);
     }
+  }
+
+  hr {
+    border: none;
+    height: 1px;
+    background: #928670;
+    width: 100%;
   }
 `
 const GlobalStyles = () => <Global styles={customStyles} />

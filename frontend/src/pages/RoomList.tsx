@@ -22,7 +22,7 @@ export const RoomList = () => {
   if (!rooms) return <FullPageSpinner />
 
   return (
-    <div tw="bg-gradient-to-b from-background to-primary min-h-screen grid content-start">
+    <div tw="bg-gradient-to-b from-background to-primary grid content-start h-min-h-navscreen">
       <div tw="grid m-auto p-4 max-w-lg mt-10 justify-items-center gap-2">
         <MainSection />
         <Title>{rooms.length ? 'Concerts:' : 'Currently no concerts...'}</Title>

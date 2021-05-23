@@ -2,6 +2,8 @@ import config from 'config'
 import express from 'express'
 import { OAuth2Client } from 'google-auth-library'
 import User, { UserType } from 'models/user'
+import { LoginResponse } from 'types'
+import Room from './../models/room'
 const router = express.Router()
 
 const CLIENT_ID = config.get<string>('googleClientId')
@@ -9,7 +11,7 @@ const client = new OAuth2Client(CLIENT_ID)
 
 // TODO: error handling, validation
 // TODO: add typescript to all of this
-router.post('/google', async (req, res) => {
+router.post<null, LoginResponse | string>('/google', async (req, res) => {
   const { token } = req.body
   if (!token) return res.status(401).send('Token not provided')
   try {
@@ -34,14 +36,18 @@ router.post('/google', async (req, res) => {
       email,
     }
 
-    const newOrUpdatedUser = await User.findOneAndUpdate({ email }, newUser, {
+    const { id, name } = await User.findOneAndUpdate({ email }, newUser, {
       upsert: true,
       new: true,
     })
+      .select('email name picture _id')
+      .exec()
 
-    req.session.userId = newOrUpdatedUser.id
+    req.session.userId = id
 
-    return res.status(201).send(newOrUpdatedUser)
+    const ownedRoom = await Room.findOne({ owner: id }, '_id name')
+
+    return res.status(201).send({ id, name, picture, ownedRoom, email })
   } catch (ex) {
     return res.status(404).send(ex)
   }
