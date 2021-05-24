@@ -7,7 +7,7 @@ type ScoreSelectProps = {
   options: OptionType[]
 } & SelectHTMLAttributes<HTMLSelectElement>
 
-const ScoreSelect = ({ options, ...props }: ScoreSelectProps) => {
+const TransparentSelect = ({ options, ...props }: ScoreSelectProps) => {
   return (
     <select
       tw="fixed text-xl md:text-2xl xl:text-3xl opacity-40 hocus:opacity-100 focus:outline-none transform duration-300"
@@ -22,4 +22,4 @@ const ScoreSelect = ({ options, ...props }: ScoreSelectProps) => {
   )
 }
 
-export { ScoreSelect }
+export { TransparentSelect }

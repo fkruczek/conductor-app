@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 // import { useForm } from 'react-hook-form'
 import { useRoomConcert } from 'api/rooms'
-import { ScoreSelect } from 'components/controls'
+import { TransparentSelect } from 'components/controls'
 import Score from 'components/score/score'
 import React from 'react'
 import 'twin.macro'
@@ -14,7 +14,7 @@ export const Concert = () => {
     <div tw="min-h-screen">
       <Score musicXML={score} conductorLocation={conductorLocation} isOwner={isOwner} />
       {isOwner && (
-        <ScoreSelect
+        <TransparentSelect
           tw="top-2 right-2"
           options={suites}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => changeSuite(e.target.value)}

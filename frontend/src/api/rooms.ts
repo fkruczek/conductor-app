@@ -72,6 +72,7 @@ const useRoomConcert = () => {
     subscribeToRoomConcert(id, {
       onSuiteChange: () => run(getRoomConcert(id, parts)),
       onConductorPageChange: (_, conductorLocation) => {
+        console.log(conductorLocation)
         setConductorLocation(conductorLocation)
       },
     })

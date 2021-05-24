@@ -53,3 +53,5 @@ export interface ScoreLocation {
   conductorPages: number[]
   startingMeasure?: number
 }
+
+export type SwitchMode = 'paginated' | 'continuous'

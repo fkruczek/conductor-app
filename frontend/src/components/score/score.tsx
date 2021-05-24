@@ -1,8 +1,8 @@
-import { ScoreLocation } from 'models'
+import { ScoreLocation, SwitchMode } from 'models'
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay'
 import React, { ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { emitConductorPageChange, emitConductorStartingMeasure } from 'sockets'
-import { RerenderButton, ScoreNavigation } from './controls'
+import { ModeSwitch, RerenderButton, ScoreNavigation } from './controls'
 import { Loader } from './loader'
 
 interface ScoreProps {
@@ -15,15 +15,17 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [startingMeasure, setStartingMeasure] = useState(1)
   const [showRerender, setShowRerender] = useState(false)
+  const [switchMode, setSwitchMode] = useState<SwitchMode>('paginated')
   const divRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    console.log(conductorLocation)
     const { conductorCurrentPage, conductorPages, startingMeasure } = conductorLocation
-    if (startingMeasure) {
+    if (startingMeasure !== undefined) {
       goToMeasure(startingMeasure)
       return
     }
-    if (!conductorPages.length) return
+    if (!conductorPages?.length) return
     handleConductorPageChange(conductorCurrentPage, conductorPages)
     // TODO: make a callback from handle fn
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,10 +88,6 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
     score?.cursor.reset()
     while (getCurrentMeasureNumber() < targetMeasure) {
       score?.cursor.next()
-    }
-    if (targetMeasure === 0) {
-      window.scrollTo(0, 0)
-      return
     }
 
     // broadcasting measure AFTER setting cursor
@@ -165,9 +163,14 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
   }
 
   function handleConductorPageChange(conductorCurrentPage: number, conductorPages: number[]) {
+    if (switchMode === 'continuous') {
+      console.log(conductorPages, conductorCurrentPage)
+      goToMeasure(conductorPages[conductorCurrentPage - 1])
+      return
+    }
+
     let myPage = 0
     const myPagesArray = getMyPagesArray()
-    console.log(conductorCurrentPage, conductorPages)
     // TODO: maybe i dont need to send all pages but onli first  and last measure
     const firstConductorMeasure = conductorPages[conductorCurrentPage - 1]
     const lastConductorMeasure = conductorPages[conductorCurrentPage] - 1 ?? null
@@ -201,6 +204,7 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
           lastMeasureNumber={score?.Sheet.LastMeasureNumber}
         />
       )}
+      {!isOwner && <ModeSwitch onModeChange={(m) => setSwitchMode(m)} />}
       <div ref={divRef} />
     </>
   )

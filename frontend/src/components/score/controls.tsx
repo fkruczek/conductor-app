@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Button } from 'components/button'
-import { ScoreSelect } from 'components/controls'
+import { TransparentSelect } from 'components/controls'
+import { SwitchMode } from 'models'
 import React, { useCallback, useEffect } from 'react'
 import { GrCaretNext, GrChapterPrevious } from 'react-icons/gr'
 import { MdRefresh } from 'react-icons/md'
@@ -60,22 +61,21 @@ export const ScoreNavigation = ({
         <GrCaretNext tw="ml-2" />
       </StyledScoreNavigationButton>
       {lastMeasureNumber && (
-        <ScoreSelect
+        <TransparentSelect
           options={measureOptions}
           tw="bottom-2 right-2 z-30 w-20"
           onChange={(e) => onChangeStartingMeasure(+e.target.value)}
         />
       )}
-      )
     </div>
   )
 }
 
-interface Props {
+interface RerenderButtonProps {
   onClick: () => void
 }
 
-export const RerenderButton = ({ onClick }: Props) => {
+export const RerenderButton = ({ onClick }: RerenderButtonProps) => {
   return (
     <div tw="w-full fixed top-1/2 flex justify-center z-30">
       <Button tw="m-4 grid grid-flow-col gap-1 items-center text-white" onClick={onClick}>
@@ -83,5 +83,22 @@ export const RerenderButton = ({ onClick }: Props) => {
         Rerender
       </Button>
     </div>
+  )
+}
+
+interface ModeSwitchProps {
+  onModeChange: (m: SwitchMode) => void
+}
+
+export const ModeSwitch = ({ onModeChange }: ModeSwitchProps) => {
+  return (
+    <TransparentSelect
+      options={[
+        { _id: 'paginated', name: 'Paginated' },
+        { _id: 'continuous', name: 'Continuous' },
+      ]}
+      tw="bottom-2 right-2 z-30 w-32 md:w-40"
+      onChange={(e) => onModeChange(e.currentTarget.value as SwitchMode)}
+    />
   )
 }
