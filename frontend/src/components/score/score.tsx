@@ -163,15 +163,26 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
   }
 
   function handleConductorPageChange(conductorCurrentPage: number, conductorPages: number[]) {
+    const myPagesArray = getMyPagesArray()
+    myPagesArray.forEach((measure, index) => {
+      let foundInvalidPage = false
+      if (measure < conductorPages[index]) {
+        foundInvalidPage = true
+      }
+      if (foundInvalidPage) {
+        alert('Zoom out! You have less measures than conductor on at least one page!')
+        return
+      }
+    })
+
     if (switchMode === 'continuous') {
-      console.log(conductorPages, conductorCurrentPage)
       goToMeasure(conductorPages[conductorCurrentPage - 1])
       return
     }
 
     let myPage = 0
-    const myPagesArray = getMyPagesArray()
-    // TODO: maybe i dont need to send all pages but onli first  and last measure
+
+    // TODO: maybe i dont need to send all pages but only first and last measure
     const firstConductorMeasure = conductorPages[conductorCurrentPage - 1]
     const lastConductorMeasure = conductorPages[conductorCurrentPage] - 1 ?? null
     if (!lastConductorMeasure) {
