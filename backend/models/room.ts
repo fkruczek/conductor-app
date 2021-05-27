@@ -1,5 +1,4 @@
 import { Document, model, Model, Schema, Types } from 'mongoose'
-import { UserDocument } from './user'
 
 // Schema
 const RoomSchema = new Schema<RoomDocument, RoomModel>({
@@ -25,34 +24,43 @@ const RoomSchema = new Schema<RoomDocument, RoomModel>({
   },
 })
 
-export interface RoomType {
+export interface RoomBase {
   name: string
-  owner: Types.ObjectId | UserDocument
-  suites: Types.ObjectId[]
+  owner: Types.ObjectId
+  suites: Types.ObjectId[] | HalfPopulatedSuite[]
   currentSuiteId: Types.ObjectId
 }
 
-interface RoomBaseDocument extends RoomType, Document {}
+interface RoomBaseDocument extends RoomBase, Document {}
 
-// Export this for strong typing
 export interface RoomDocument extends RoomBaseDocument {
   owner: Types.ObjectId
 }
 
-// Export this for strong typing
-export interface RoomPopulatedDocument extends RoomBaseDocument {
-  owner: UserDocument
+interface HalfPopulatedSuite extends Document {
+  name: string
+  parts: { name: string; _id: Types.ObjectId; isConductors: boolean }[]
 }
 
-// For model
+export interface RoomPopulatedDocument extends RoomBaseDocument {
+  suites: HalfPopulatedSuite[]
+}
+
 export interface RoomModel extends Model<RoomDocument> {
-  findMyOwner(id: string): Promise<RoomPopulatedDocument>
+  // findMyOwner(id: string): Promise<RoomPopulatedDocument>
+  findForLobby(id: string): Promise<RoomPopulatedDocument>
 }
 
 // Static methods
-RoomSchema.statics.findMyOwner = async function (this: Model<RoomDocument>, id: string) {
-  return this.findById(id).populate('owner').exec()
+// RoomSchema.statics.findMyOwner = async function (this: Model<RoomDocument>, id: string) {
+//   return this.findById(id).populate('owner').exec()
+// }
+
+RoomSchema.statics.findForLobby = async function (this: Model<RoomDocument>, id: string) {
+  return this.findById(id).populate({
+    path: 'suites',
+    select: 'name parts.name parts._id',
+  })
 }
 
-// Default export
 export default model<RoomDocument, RoomModel>('Room', RoomSchema)

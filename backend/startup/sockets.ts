@@ -17,15 +17,6 @@ export default function (httpServer: HttpServer): void {
     registerRoomsHandlers(io, socket)
     console.log(`Connected: ${socket.id}`)
     socket.on('disconnect', () => console.log(`Disconnected: ${socket.id}`))
-    // socket.on('join', (room) => {
-    //   console.log(`Socket ${socket.id} joining ${room}`)
-    //   socket.join(room)
-    // })
-    // socket.on('chat', (data) => {
-    //   const { message, room } = data
-    //   console.log(`msg: ${message}, room: ${room}`)
-    //   io.to(room).emit('chat', message)
-    // })
   }
 
   io.on('connection', onConnection)

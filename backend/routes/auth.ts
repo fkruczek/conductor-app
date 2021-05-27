@@ -9,11 +9,9 @@ const router = express.Router()
 const CLIENT_ID = config.get<string>('googleClientId')
 const client = new OAuth2Client(CLIENT_ID)
 
-// TODO: error handling, validation
-// TODO: add typescript to all of this
 router.post<null, LoginResponse | string>('/google', async (req, res) => {
   const { token } = req.body
-  if (!token) return res.status(401).send('Token not provided')
+  if (!token) return res.status(400).send('Token not provided')
   try {
     const ticket = await client.verifyIdToken({
       idToken: token,
@@ -27,7 +25,7 @@ router.post<null, LoginResponse | string>('/google', async (req, res) => {
     const { given_name, picture, email } = googleUserPayload
 
     if (!given_name || !picture || !email) {
-      return res.status(401).send('Google account incomplete')
+      return res.status(400).send('Google account incomplete')
     }
 
     const newUser: UserType = {
@@ -49,7 +47,7 @@ router.post<null, LoginResponse | string>('/google', async (req, res) => {
 
     return res.status(201).send({ id, name, picture, ownedRoom, email })
   } catch (ex) {
-    return res.status(404).send(ex)
+    return res.status(400).send(ex)
   }
 })
 

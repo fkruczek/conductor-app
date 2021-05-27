@@ -28,14 +28,8 @@ export interface UserType {
 
 interface UserBaseDocument extends UserType, Document {}
 
-// Export this for strong typing
 export type UserDocument = UserBaseDocument
 
-// Export this for strong typing
-export type UserPopulatedDocument = UserBaseDocument
-
-// For model
 export type UserModel = Model<UserDocument>
 
-// Default export
 export default model<UserDocument, UserModel>('User', UserSchema)

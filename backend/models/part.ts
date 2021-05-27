@@ -10,18 +10,21 @@ export const partSchema = new Schema<PartDocument, PartModel>({
     type: String,
     required: true,
   },
+  isConductors: {
+    type: Boolean,
+    required: true,
+  },
 })
 
 export interface PartType {
   name: string
   musicXML: string
+  isConductors: boolean
 }
 
 interface PartBaseDocument extends PartType, Document {}
 
 export type PartDocument = PartBaseDocument
-
-export type RoomPopulatedDocument = PartBaseDocument
 
 export type PartModel = Model<PartDocument>
 

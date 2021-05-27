@@ -22,8 +22,6 @@ interface SuiteBaseDocument extends SuiteType, Document {
 
 export type SuiteDocument = SuiteBaseDocument
 
-export type SuitePopulatedDocument = SuiteBaseDocument
-
 export type SuiteModel = Model<SuiteDocument>
 
 // Default export
