@@ -3,7 +3,7 @@ import { isAuth } from 'middleware/isAuth'
 import { default as Suite } from 'models/suite'
 import { isValidObjectId, Types } from 'mongoose'
 import Room, { RoomBase, RoomDocument } from './../models/room'
-import { CreateRoomRequest } from './../types/index'
+import { CreateRoomRequest, CreateRoomResponse } from './../types/index'
 const router = express.Router()
 
 router.get<{ id: string }>('/:id/lobby', async (req, res) => {
@@ -56,18 +56,15 @@ router.get<{ id: string }>('/:id/concert', async ({ params, query, session }, re
   if (!part) return res.status(404).send('Invalid parts preferences')
 
   const isOwner = room.owner.toHexString() === session.userId
-  // TODO: complete this (return also names for suites, do not return them if not owner???)
   return res.send({ isOwner, suites: room.suites, score: part.musicXML })
 })
 
 router.get<void, RoomDocument[]>('/', async (_, res) => {
-  // TODO: do not return everything
-  const rooms = await Room.find()
-
+  const rooms = await Room.find({}, '_id name')
   return res.send(rooms)
 })
 
-router.post<any, any, CreateRoomRequest>('/', isAuth, async (req, res) => {
+router.post<void, string | CreateRoomResponse, CreateRoomRequest>('/', isAuth, async (req, res) => {
   const roomInDb = await Room.findOne({ owner: req.session.userId })
   if (roomInDb) return res.status(400).send('You have already created one room')
 

@@ -1,8 +1,11 @@
+import { AppProviders } from 'context'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import GlobalStyles from './styles/GlobalStyles'
+import { initSocket } from 'sockets/startup'
 import App from './App'
-import { AppProviders } from 'context'
+import GlobalStyles from './styles/GlobalStyles'
+
+initSocket()
 
 ReactDOM.render(
   <React.StrictMode>

@@ -6,5 +6,6 @@ export default async function (): Promise<void> {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
+    useCreateIndex: true,
   }).then(() => console.log('✅ Mongo connected...'))
 }

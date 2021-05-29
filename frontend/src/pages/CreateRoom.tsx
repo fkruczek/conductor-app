@@ -8,7 +8,7 @@ import { CreateRoomRequest, RoomListResponse } from 'models'
 import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
-import { emitRoomCreated } from 'sockets'
+import { emitRoomCreated } from 'sockets/rooms'
 import 'twin.macro'
 
 export const CreateRoom = () => {

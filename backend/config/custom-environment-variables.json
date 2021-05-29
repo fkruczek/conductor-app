@@ -1,4 +1,4 @@
 {
-    "jwtPrivateKey": "conductor_jwtPrivateKey",
-    "googleClientId": "conductor_googleClientId"
+    "googleClientId": "conductor_googleClientId",
+    "redisSecret": "conductor_redisSecret"
 }

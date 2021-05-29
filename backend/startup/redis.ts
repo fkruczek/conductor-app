@@ -1,7 +1,8 @@
-import redis from 'redis'
+import config from 'config'
 import connectRedis from 'connect-redis'
-import session from 'express-session'
 import { Express } from 'express'
+import session from 'express-session'
+import redis from 'redis'
 
 declare module 'express-session' {
   export interface SessionData {
@@ -24,13 +25,13 @@ export default function (app: Express): void {
   })
 
   redisClient.on('connect', () => {
-    console.log('✅ Redis connected')
+    console.log('✅ Redis connected...')
   })
 
   app.use(
     session({
       store: new RedisStore({ client: redisClient }),
-      secret: 'keyboard cat', // TODO: store in env var
+      secret: config.get<string>('redisSecret'),
       resave: false,
       saveUninitialized: true,
       // TODO: secure coookies

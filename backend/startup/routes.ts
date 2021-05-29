@@ -1,3 +1,4 @@
+import config from 'config'
 import cors from 'cors'
 import express, { Express } from 'express'
 import auth from '../routes/auth'
@@ -6,7 +7,7 @@ import suites from '../routes/suites'
 
 export default function (app: Express): void {
   app.use(
-    cors({ credentials: true, origin: 'http://localhost:3000' }), // TODO: do i need this?
+    cors({ credentials: true, origin: config.get('client') }),
     express.json(),
     express.urlencoded({ extended: true }) // TODO: do i need this?
   )

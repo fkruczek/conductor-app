@@ -1,6 +1,7 @@
 {
-    "jwtPrivateKey": "",
-    "googleClientId": "",
-    "db": "mongodb://localhost",
-    "port": 3002
-  }
+  "googleClientId": "",
+  "redisSecret": "",
+  "db": "mongodb://localhost",
+  "port": 3002,
+  "client": "http://localhost:3000"
+}

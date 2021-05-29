@@ -5,7 +5,7 @@ import { api } from 'utils/apiClient'
 import { useAsync } from 'utils/useAsync'
 
 if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
-  throw new Error('REACT_APP_GOOGLE_CLIENT_ID is undefined!!!')
+  throw new Error('❌ REACT_APP_GOOGLE_CLIENT_ID is undefined!!!')
 }
 
 interface AuthContext {

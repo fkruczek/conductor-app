@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 if (!process.env.REACT_APP_API_URL) {
-  throw new Error('REACT_APP_API_URL is undefined!!!')
+  throw new Error('❌ REACT_APP_API_URL is undefined!!!')
 }
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL + '/api/'

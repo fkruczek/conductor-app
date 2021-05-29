@@ -22,7 +22,6 @@ export const ScoreNavigation = ({
   lastMeasureNumber,
   onChangeStartingMeasure,
 }: ScoreNavigationProps) => {
-  console.log(lastMeasureNumber)
   const handleKeyDown = useCallback(
     ({ code }: KeyboardEvent) => {
       if (['ArrowRight'].includes(code)) {

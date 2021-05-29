@@ -6,13 +6,12 @@ import { MainSection } from 'components/roomsList'
 import { RoomListResponse } from 'models'
 import React, { useEffect } from 'react'
 import 'twin.macro'
-import { subscribeToRoomsList, unsubscribeToRoomsList } from '../sockets/index'
+import { subscribeToRoomsList, unsubscribeToRoomsList } from '../sockets/rooms'
 
 export const RoomList = () => {
   const { data: rooms, setData: setRooms } = useRooms()
   useEffect(() => {
-    subscribeToRoomsList((err, rooms: RoomListResponse[]) => {
-      if (err) return
+    subscribeToRoomsList((rooms: RoomListResponse[]) => {
       setRooms(rooms)
     })
     return () => {

@@ -59,7 +59,7 @@ export interface RoomModel extends Model<RoomDocument> {
 RoomSchema.statics.findForLobby = async function (this: Model<RoomDocument>, id: string) {
   return this.findById(id).populate({
     path: 'suites',
-    select: 'name parts.name parts._id',
+    select: 'name parts.name parts._id parts.isConductors',
   })
 }
 

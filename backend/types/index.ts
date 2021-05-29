@@ -6,6 +6,11 @@ export interface CreateRoomRequest {
   name: string
 }
 
+export interface CreateRoomResponse {
+  _id: ObjectId
+  name: string
+}
+
 export interface LoginResponse {
   email: string
   name: string

@@ -1,7 +1,7 @@
 import { ScoreLocation, SwitchMode } from 'models'
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay'
 import React, { ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { emitConductorPageChange, emitConductorStartingMeasure } from 'sockets'
+import { emitConductorPageChange, emitConductorStartingMeasure } from 'sockets/concert'
 import { ModeSwitch, RerenderButton, ScoreNavigation } from './controls'
 import { Loader } from './loader'
 
@@ -19,7 +19,6 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
   const divRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    console.log(conductorLocation)
     const { conductorCurrentPage, conductorPages, startingMeasure } = conductorLocation
     if (startingMeasure !== undefined) {
       goToMeasure(startingMeasure)

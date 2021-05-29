@@ -1,7 +1,7 @@
 import { RoomConcertResponse, RoomListResponse, RoomLobbyResponse, ScoreLocation } from 'models'
 import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { emitSuiteChange, subscribeToRoomConcert, unsubscribeToRoomConcert } from 'sockets'
+import { emitSuiteChange, subscribeToConcert, unsubscribeToRoomConcert } from 'sockets/concert'
 import { api } from 'utils/apiClient'
 import { useAsync } from 'utils/useAsync'
 import { CreateRoomRequest } from './../models/index'
@@ -69,10 +69,9 @@ const useRoomConcert = () => {
   })
 
   useEffect(() => {
-    subscribeToRoomConcert(id, {
+    subscribeToConcert(id, {
       onSuiteChange: () => run(getRoomConcert(id, parts)),
-      onConductorPageChange: (_, conductorLocation) => {
-        console.log(conductorLocation)
+      onConductorPageChange: (_: null, conductorLocation: ScoreLocation) => {
         setConductorLocation(conductorLocation)
       },
     })
