@@ -21,16 +21,19 @@ export const RoomList = () => {
   if (!rooms) return <FullPageSpinner />
 
   return (
-    <div tw="bg-gradient-to-b from-background to-primary grid content-start h-min-h-navscreen">
-      <div tw="grid m-auto p-4 max-w-lg mt-10 justify-items-center gap-2">
-        <MainSection />
-        <Title>{rooms.length ? 'Concerts:' : 'Currently no concerts...'}</Title>
-        {rooms.map(({ _id, name }) => (
-          <LinkButton to={`lobby/${_id}`} key={_id} tw="bg-button text-base">
-            {name}
-          </LinkButton>
-        ))}
+    <>
+      <div tw="absolute inset-0 animate-fadein bg-gradient-to-b from-background to-primary"></div>
+      <div tw="grid content-start h-min-h-navscreen relative">
+        <div tw="grid m-auto p-4 max-w-lg mt-10 justify-items-center gap-2">
+          <MainSection />
+          <Title>{rooms.length ? 'Concerts:' : 'Currently no concerts...'}</Title>
+          {rooms.map(({ _id, name }) => (
+            <LinkButton to={`lobby/${_id}`} key={_id} tw="bg-button text-base">
+              {name}
+            </LinkButton>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }

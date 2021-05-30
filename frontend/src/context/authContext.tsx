@@ -1,3 +1,4 @@
+import { FullPageSpinner } from 'components'
 import { LoginResponse } from 'models'
 import React, { createContext, ReactNode, useCallback, useEffect } from 'react'
 import { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login'
@@ -32,7 +33,9 @@ const getUser = async (): Promise<LoginResponse | null> => {
 }
 
 const AuthProvider = (props: { children: ReactNode }) => {
-  const { data: user, isLoading, isIdle, run, setData } = useAsync<LoginResponse | null>(null)
+  const { data: user, isLoading, isIdle, run, setData, isError } = useAsync<LoginResponse | null>(
+    null
+  )
 
   const handleLoginFailure = useCallback(() => {
     window.localStorage.removeItem(localStorageKey)
@@ -63,8 +66,14 @@ const AuthProvider = (props: { children: ReactNode }) => {
     () => ({ user, setData, handleLoginSuccess, handleLogoutSuccess, isIdle, isLoading }),
     [handleLoginSuccess, handleLogoutSuccess, user, isIdle, isLoading, setData]
   )
+  if (isLoading) {
+    return <FullPageSpinner />
+  }
 
-  // TODO: add spinner, error returns?
+  if (isError) {
+    handleLoginFailure()
+  }
+
   return <AuthContext.Provider value={value} {...props} />
 }
 

@@ -1,8 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { Link } from 'react-router-dom'
-import tw from 'twin.macro'
+import tw, { styled } from 'twin.macro'
 
-const Button = tw.button`px-10 py-2 bg-button text-base cursor-pointer rounded-lg border-none shadow-lg focus:outline-none transform duration-75 text-white font-extrabold hover:scale-105`
+const Button = styled.button(({ isLoading }: any) => [
+  tw`px-10 py-2 bg-button text-base cursor-pointer rounded-lg border-none shadow-lg focus:outline-none transform duration-75 text-white font-extrabold hover:scale-105`,
+  isLoading && tw`pointer-events-none opacity-50`,
+])
 
 const LinkButton = tw(
   Link

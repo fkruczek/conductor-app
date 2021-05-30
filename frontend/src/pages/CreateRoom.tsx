@@ -25,10 +25,10 @@ export const CreateRoom = () => {
       if (!user) {
         return
       }
-      setData({ ...user, ownedRoom: { _id, name } })
 
       emitRoomCreated(user.id)
       history.push('/lobby/' + _id)
+      setData({ ...user, ownedRoom: { _id, name } })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [user]

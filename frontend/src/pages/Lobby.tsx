@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 // import { useForm } from 'react-hook-form'
-import { deleteRoom, useRoomLobby } from 'api/rooms'
+import { useDeleteRoom, useRoomLobby } from 'api/rooms'
 import { Button } from 'components/button'
 import { Select } from 'components/form'
 import { Title } from 'components/layout'
@@ -15,16 +15,13 @@ import 'twin.macro'
 const LobbyOwnerSection = () => {
   const history = useHistory()
   const { user, setData } = useAuthContext()
+  const { runDeleteRoom, isLoading } = useDeleteRoom(() => {
+    if (!user) throw Error('This is not possible')
+    history.push('/')
+    setData({ ...user, ownedRoom: null })
+  })
+
   if (!user) return null
-
-  const handleDeleteRoom = () => {
-    // TODO: turn on loader
-
-    deleteRoom().then(() => {
-      history.push('/')
-      setData({ ...user, ownedRoom: null })
-    })
-  }
 
   return (
     <div>
@@ -33,7 +30,8 @@ const LobbyOwnerSection = () => {
       <Button
         tw="mt-4 bg-red-900 grid grid-flow-col gap-2 items-center"
         type="button"
-        onClick={handleDeleteRoom}
+        onClick={runDeleteRoom}
+        isLoading={isLoading}
       >
         <FaTrash />
         Delete concert
@@ -42,7 +40,6 @@ const LobbyOwnerSection = () => {
   )
 }
 
-// TODO: https://react-hook-form.com/advanced-usage/#SmartFormComponent
 // TODO: autoselect parts on reconnect from localstorage
 const LobbyForm = ({ data: { name, suites } }: { data: RoomLobbyResponse }) => {
   const history = useHistory()

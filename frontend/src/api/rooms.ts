@@ -1,6 +1,6 @@
 import { RoomConcertResponse, RoomListResponse, RoomLobbyResponse, ScoreLocation } from 'models'
-import { useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import { emitSuiteChange, subscribeToConcert, unsubscribeToRoomConcert } from 'sockets/concert'
 import { api } from 'utils/apiClient'
 import { useAsync } from 'utils/useAsync'
@@ -57,8 +57,8 @@ const getRoomConcert = (id: string, parts: string | null) => {
 }
 
 const useRoomConcert = () => {
-  const parts = localStorage.getItem('partsChoice')
-  // TODO: if !partChoice in localStorage then redirect to lobby
+  const history = useHistory()
+  const { current: parts } = useRef(localStorage.getItem('partsChoice'))
 
   const { id } = useParams<{ id: string }>()
   const { run, data } = useAsync<RoomConcertResponse | undefined>(undefined)
@@ -81,19 +81,35 @@ const useRoomConcert = () => {
   }, [id, parts, run])
 
   useEffect(() => {
+    if (!id) {
+      history.push('/')
+    }
+    if (!parts) {
+      history.push('/lobby/' + id)
+    }
     run(getRoomConcert(id, parts))
-  }, [id, run, parts])
+  }, [id, run, parts, history])
 
   if (!data) return null
 
-  // TODO: is this a good pattern?
   const changeSuite = (suiteId: string) => emitSuiteChange(id, suiteId)
 
   return { ...data, conductorLocation, changeSuite }
 }
 
-const deleteRoom = () => {
-  return api.delete('rooms')
+const deleteRoom = (onSuccess: () => void) => {
+  return api.delete('rooms').then(({ data }) => {
+    onSuccess()
+    return data
+  })
 }
 
-export { useRooms, useCreateRoom, useRoomLobby, useRoomConcert, deleteRoom }
+const useDeleteRoom = (onSuccess: () => void) => {
+  const { run, ...rest } = useAsync<void>(undefined)
+
+  const runDeleteRoom = useCallback(() => run(deleteRoom(onSuccess)), [onSuccess, run])
+
+  return { runDeleteRoom, ...rest }
+}
+
+export { useRooms, useCreateRoom, useRoomLobby, useRoomConcert, useDeleteRoom }

@@ -48,8 +48,8 @@ function useAsync<T>(
   const setError = React.useCallback((error) => safeSetState({ error, status: 'rejected' }), [
     safeSetState,
   ])
-  const reset = React.useCallback(() => safeSetState(initialStateRef.current), [safeSetState])
 
+  const reset = React.useCallback(() => safeSetState(initialStateRef.current), [safeSetState])
   const run = React.useCallback(
     (promise: Promise<T>) => {
       if (!promise || !promise.then) {
@@ -78,7 +78,6 @@ function useAsync<T>(
     isLoading: status === 'pending',
     isError: status === 'rejected',
     isSuccess: status === 'resolved',
-
     setData,
     setError,
     error,

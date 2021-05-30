@@ -21,6 +21,15 @@ const customStyles = css`
     }
   }
 
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   hr {
     border: none;
     height: 1px;

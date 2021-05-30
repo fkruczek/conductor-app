@@ -1,6 +1,5 @@
 import { Document, Model, Schema } from 'mongoose'
 
-// Schema
 export const partSchema = new Schema<PartDocument, PartModel>({
   name: {
     type: String,

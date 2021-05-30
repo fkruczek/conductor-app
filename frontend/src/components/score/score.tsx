@@ -26,7 +26,7 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
     }
     if (!conductorPages?.length) return
     handleConductorPageChange(conductorCurrentPage, conductorPages)
-    // TODO: make a callback from handle fn
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conductorLocation])
 
@@ -71,7 +71,7 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
         setIsLoading(false)
       })
     })
-    // TODO: make a callback from get fn
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [musicXML])
 
@@ -139,8 +139,6 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
   }
 
   function getMyPagesArray() {
-    // TODO: to reconsider - keep it in state or not?
-    // there was problems with useLayoutEffect
     if (!score) return []
     return score.GraphicSheet.MusicPages.map(
       ({ MusicSystems }) => MusicSystems[0].GraphicalMeasures[0][0].MeasureNumber
@@ -174,16 +172,16 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
       }
     })
 
+    const firstConductorMeasure = conductorPages[conductorCurrentPage - 1]
+    const lastConductorMeasure = conductorPages[conductorCurrentPage] - 1 ?? null
+
     if (switchMode === 'continuous') {
-      goToMeasure(conductorPages[conductorCurrentPage - 1])
+      goToMeasure(firstConductorMeasure)
       return
     }
 
     let myPage = 0
 
-    // TODO: maybe i dont need to send all pages but only first and last measure
-    const firstConductorMeasure = conductorPages[conductorCurrentPage - 1]
-    const lastConductorMeasure = conductorPages[conductorCurrentPage] - 1 ?? null
     if (!lastConductorMeasure) {
       goToMeasure(myPagesArray[myPagesArray.length - 1])
     }

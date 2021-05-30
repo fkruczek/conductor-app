@@ -6,7 +6,7 @@ import 'twin.macro'
 export const Header = () => {
   const { user } = useAuthContext()
   return (
-    <nav tw="h-14 px-4 flex justify-end items-center text-2xl capitalize">
+    <nav tw="h-14 px-4 flex justify-end items-center text-2xl capitalize relative  z-10">
       {user ? (
         <div tw="flex items-center">
           {user.name}

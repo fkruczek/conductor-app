@@ -14,6 +14,9 @@ module.exports = {
       spacing: {
         'min-h-navscreen': 'calc(100vh - 56px)',
       },
+      animation: {
+        fadein: 'fadein 1s ease-in-out',
+      },
     },
   },
   plugins: [],
