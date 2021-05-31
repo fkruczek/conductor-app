@@ -2,7 +2,7 @@ import config from 'config'
 import { connect } from 'mongoose'
 
 export default async function (): Promise<void> {
-  await connect(config.get('db'), {
+  await connect(config.db, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

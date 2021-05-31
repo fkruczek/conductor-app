@@ -1,12 +1,12 @@
 import config from 'config'
 import express from 'express'
 import { OAuth2Client } from 'google-auth-library'
-import User, { UserType } from 'models/user'
 import { LoginResponse } from 'types'
+import User, { UserType } from '../models/user'
 import Room from './../models/room'
 const router = express.Router()
 
-const CLIENT_ID = config.get<string>('googleClientId')
+const CLIENT_ID = config.googleClientId
 const client = new OAuth2Client(CLIENT_ID)
 
 router.post<null, LoginResponse | string>('/google', async (req, res) => {

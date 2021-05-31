@@ -18,7 +18,9 @@ export default function (app: Express): void {
   // }
 
   const RedisStore = connectRedis(session)
-  const redisClient = redis.createClient()
+  const redisClient = redis.createClient({
+    host: config.redisHost,
+  })
 
   redisClient.on('error', function (error: any) {
     console.error(error)
@@ -31,9 +33,10 @@ export default function (app: Express): void {
   app.use(
     session({
       store: new RedisStore({ client: redisClient }),
-      secret: config.get<string>('redisSecret'),
+      secret: config.redisSecret,
       resave: false,
       saveUninitialized: true,
+
       // TODO: secure coookies
     })
   )

@@ -9,7 +9,7 @@ import Room from './../models/room'
 export default function (httpServer: HttpServer): void {
   const io = new Server(httpServer, {
     cors: {
-      origin: config.get('client'),
+      origin: config.client,
     },
   })
 

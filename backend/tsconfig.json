@@ -3,15 +3,9 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "es6",
-    "rootDir": "./",
+    "rootDir": ".",
     "outDir": "./build",
     "strict": true,
-    "lib": [
-      "dom",
-      "es6",
-      "es2017",
-      "esnext.asynciterable"
-    ],
     "sourceMap": true,
     "moduleResolution": "node",
     "removeComments": true,
@@ -30,9 +24,18 @@
     "baseUrl": ".",
     "typeRoots": [
       "./node_modules/@types" 
-    ]
+    ],
+    "types": [
+      "node"
+    ],
+    "paths" : {
+      "middleware/*": ["middleware/*"],
+      "models/*": ["models/*"],
+      "routes/*": ["routes/*"],
+      "startup/*": ["startup/*"],
+      "types/*": ["types/*"],
+      "utils/*": ["utils/*"],
+      "config/*": ["config/*"],
+    }
   },
-  "exclude": [
-    "node_modules"
-  ],
 }

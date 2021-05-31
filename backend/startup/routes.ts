@@ -7,7 +7,7 @@ import suites from '../routes/suites'
 
 export default function (app: Express): void {
   app.use(
-    cors({ credentials: true, origin: config.get('client') }),
+    cors({ credentials: true, origin: config.client }),
     express.json()
     // express.urlencoded({ extended: true })
   )
