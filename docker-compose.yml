@@ -1,0 +1,62 @@
+version: '3.4'
+
+networks: 
+  conductor-dev:
+    driver: bridge
+
+services: 
+  redis:
+    image: redis:latest
+    command: ["redis-server", "--bind", "0.0.0.0", "--port", "6379"]
+    networks:
+      - conductor-dev
+    ports:
+      - "6379:6379"
+
+  backend:
+    image: backend:latest
+    depends_on:
+      - redis
+      - mongodb
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.backend
+    ports:
+      - "3002:3002"
+    environment: 
+      NODE_ENV: production
+    networks: 
+      - conductor-dev
+    links:
+      - redis
+      - mongodb
+    
+
+  frontend:
+    image: frontend:latest
+    ports: 
+      - "80:80"
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.frontend
+    networks: 
+      - conductor-dev     
+    depends_on:
+      - redis
+      - mongodb
+    environment:
+      - REACT_APP_GOOGLE_CLIENT_ID="396035779233-sgtpcv8252db9o4neu9ltokklvti5d1a.apps.googleusercontent.com"
+      - REACT_APP_API_URL="backend"
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - data:/data/db
+    networks: 
+      - conductor-dev
+
+volumes:
+  data:

@@ -17,7 +17,7 @@ const production: Config = {
   db,
   port: 3002,
   client: 'http://localhost',
-  redisHost: 'redis_image',
+  redisHost: 'redis',
 }
 
 const development: Config = {
