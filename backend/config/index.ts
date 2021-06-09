@@ -33,7 +33,7 @@ const development: Config = {
   port: 3001,
   client: 'http://localhost:3000',
   redisConnection:
-    'redis://conductor-redis.redis.cache.windows.net:6380,password=mdoBnI4aTmxwhXkXP1u02BssxMWrSVdiOVwNrq0hIDM=,ssl=True,abortConnect=False',
+    'redis://conductor-redis.redis.cache.windows.net:6380,password=mdoBnI4aTmxwhXkXP1u02BssxMWrSVdiOVwNrq0hIDM=,ssl=False,abortConnect=False',
 }
 
 // const config = production
