@@ -7,7 +7,7 @@ WORKDIR /app
 # add `/app/node_modules/.bin` to $PATH
 # ENV PATH /app/node_modules/.bin:$PATH
 ENV REACT_APP_GOOGLE_CLIENT_ID 396035779233-sgtpcv8252db9o4neu9ltokklvti5d1a.apps.googleusercontent.com
-ENV REACT_APP_API_URL http://conductor-api.azurewebsites.net
+ENV REACT_APP_API_URL https://conductor-api.azurewebsites.net
 
 
 # install app dependencies
