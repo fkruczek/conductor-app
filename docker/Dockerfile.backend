@@ -15,11 +15,14 @@ RUN yarn
 # add app
 COPY ./backend/ ./
 
-ENV CONDUCTOR_DB mongodb://mongodb:27017/test
+ENV CONDUCTOR_DB CONDUCTOR_DB
 ENV CONDUCTOR_GOOGLE_CLIENT_ID 396035779233-sgtpcv8252db9o4neu9ltokklvti5d1a.apps.googleusercontent.com
 ENV CONDUCTOR_REDIS_SECRET wqeriewqorowqerjwqeojirioew
 ENV NODE_ENV production
 # start app
 RUN yarn build
+
+EXPOSE 80
+
 # RUN yarn serve
 CMD ["yarn", "serve"]

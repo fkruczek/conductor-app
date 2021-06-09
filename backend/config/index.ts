@@ -19,7 +19,7 @@ const production: Config = {
   db,
   port: 80,
   client: 'https://conductor-app.azurewebsites.net',
-  redisHost: 'redis',
+  redisHost: 'conductor-redis.redis.cache.windows.net',
 }
 
 const development: Config = {
