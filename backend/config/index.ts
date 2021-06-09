@@ -22,17 +22,18 @@ const production: Config = {
   redisHost: 'conductor-redis.redis.cache.windows.net',
 }
 
-const development: Config = {
-  env: 'development',
-  googleClientId,
-  redisSecret,
-  db,
-  port: 3002,
-  client: 'http://localhost:3000',
-  redisHost: '127.0.0.1',
-}
+// const development: Config = {
+//   env: 'development',
+//   googleClientId,
+//   redisSecret,
+//   db,
+//   port: 3002,
+//   client: 'http://localhost:3000',
+//   redisHost: '127.0.0.1',
+// }
 
-const config = process.env.NODE_ENV === 'production' ? production : development
+const config = production
+// const config = process.env.NODE_ENV === 'production' ? production : development
 
 Object.keys(config).forEach((key) => {
   if (!config[key as keyof Config]) {
