@@ -1,4 +1,5 @@
 interface Config {
+  env: 'production' | 'development'
   googleClientId: string
   redisSecret: string
   db: string
@@ -12,6 +13,7 @@ const redisSecret = process.env.CONDUCTOR_REDIS_SECRET || ''
 const db = process.env.CONDUCTOR_DB || ''
 
 const production: Config = {
+  env: 'production',
   googleClientId,
   redisSecret,
   db,
@@ -21,6 +23,7 @@ const production: Config = {
 }
 
 const development: Config = {
+  env: 'development',
   googleClientId,
   redisSecret,
   db,
