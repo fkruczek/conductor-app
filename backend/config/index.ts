@@ -19,7 +19,7 @@ const production: Config = {
   googleClientId,
   redisSecret,
   db,
-  port: 80,
+  port: 8000,
   client: 'https://conductor-app.azurewebsites.net',
   redisConnection:
     'redis://conductor-redis.redis.cache.windows.net:6380,password=mdoBnI4aTmxwhXkXP1u02BssxMWrSVdiOVwNrq0hIDM=,ssl=True,abortConnect=False',

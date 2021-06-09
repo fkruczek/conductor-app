@@ -22,7 +22,7 @@ ENV NODE_ENV production
 # start app
 RUN yarn build
 
-EXPOSE 80
+EXPOSE 8000
 
 # RUN yarn serve
 CMD ["yarn", "serve"]
