@@ -18,9 +18,7 @@ export default function (app: Express): void {
   // }
 
   const RedisStore = connectRedis(session)
-  const redisClient = redis.createClient({
-    host: config.redisHost,
-  })
+  const redisClient = redis.createClient(config.redisConnection)
 
   redisClient.on('error', function (error: any) {
     console.error(error)
