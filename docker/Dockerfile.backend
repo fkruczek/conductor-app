@@ -15,7 +15,7 @@ RUN yarn
 # add app
 COPY ./backend/ ./
 
-ENV CONDUCTOR_DB mongodb+srv://conductoruser:conductor@conductor-arytp.mongodb.net/conductor?authSource=admin&replicaSet=Conductor-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true
+ENV CONDUCTOR_DB mongodb+srv://conductoruser:conductor@conductor.arytp.mongodb.net/conductor?retryWrites=true&w=majority
 ENV CONDUCTOR_GOOGLE_CLIENT_ID 396035779233-sgtpcv8252db9o4neu9ltokklvti5d1a.apps.googleusercontent.com
 ENV CONDUCTOR_REDIS_SECRET wqeriewqorowqerjwqeojirioew
 ENV NODE_ENV production
