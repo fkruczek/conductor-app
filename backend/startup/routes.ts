@@ -14,4 +14,7 @@ export default function (app: Express): void {
   app.use('/api/auth', auth)
   app.use('/api/suites', suites)
   app.use('/api/rooms', rooms)
+  app.get('/', (_, res) => {
+    res.status(200).send('hello world')
+  })
 }

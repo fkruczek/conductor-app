@@ -17,8 +17,8 @@ const production: Config = {
   googleClientId,
   redisSecret,
   db,
-  port: 3002,
-  client: 'http://localhost',
+  port: 80,
+  client: 'conductor-app.azurewebsites.net',
   redisHost: 'redis',
 }
 
