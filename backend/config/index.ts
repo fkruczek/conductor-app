@@ -18,7 +18,7 @@ const production: Config = {
   redisSecret,
   db,
   port: 80,
-  client: 'conductor-app.azurewebsites.net',
+  client: 'http://conductor-app.azurewebsites.net',
   redisHost: 'redis',
 }
 
