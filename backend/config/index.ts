@@ -13,14 +13,12 @@ const redisSecret = process.env.CONDUCTOR_REDIS_SECRET || ''
 const redisConnection = process.env.CONDUCTOR_REDIS_CONNECTION || ''
 const db = process.env.CONDUCTOR_DB || ''
 
-console.log(db, googleClientId, redisSecret)
-
 const production: Config = {
   env: 'production',
   googleClientId,
   redisSecret,
   db,
-  port: 8000,
+  port: 80,
   client: 'https://conductor-app.azurewebsites.net',
   redisConnection,
 }
