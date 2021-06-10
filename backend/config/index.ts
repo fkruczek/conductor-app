@@ -30,7 +30,7 @@ const development: Config = {
   redisConnection: 'redis://conductor-redis.redis.cache.windows.net',
   redisSecret,
   db,
-  port: 3001,
+  port: 3010,
   client: 'http://localhost:3000',
 }
 

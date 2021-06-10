@@ -37,8 +37,13 @@ export default function (app: Express): void {
       store: new RedisStore({ client: redisClient }),
       secret: config.redisSecret,
       resave: false,
-      saveUninitialized: true,
-
+      saveUninitialized: false,
+      cookie: {
+        domain: '.conductor-api.azurewebsites.net',
+        maxAge: 1000 * 60 * 60,
+        secure: true,
+        httpOnly: false,
+      },
       // TODO: secure coookies
     })
   )
