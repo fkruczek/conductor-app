@@ -37,7 +37,7 @@ export default function (app: Express): void {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        domain: '.azurewebsites.net',
+        domain: 'conductor-app.azurewebsites.net',
         maxAge: 1000 * 60 * 60,
         secure: true,
         httpOnly: false,
