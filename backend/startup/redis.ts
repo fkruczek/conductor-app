@@ -41,6 +41,7 @@ export default function (app: Express): void {
         maxAge: 1000 * 60 * 60,
         secure: true,
         httpOnly: false,
+        sameSite: 'none',
       },
       // TODO: secure coookies
     })
