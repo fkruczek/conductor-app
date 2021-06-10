@@ -10,7 +10,7 @@ interface Config {
 
 const googleClientId = process.env.CONDUCTOR_GOOGLE_CLIENT_ID || ''
 const redisSecret = process.env.CONDUCTOR_REDIS_SECRET || ''
-const redisConnection = process.env.CONDUCTOR_REDIS_CONNECTION || ''
+// const redisConnection = process.env.CONDUCTOR_REDIS_CONNECTION || ''
 const db = process.env.CONDUCTOR_DB || ''
 
 const production: Config = {
@@ -20,15 +20,14 @@ const production: Config = {
   db,
   port: 80,
   client: 'https://conductor-app.azurewebsites.net',
-  redisConnection,
+  redisConnection: 'redis://conductor-redis.redis.cache.windows.net',
 }
 
 const development: Config = {
   env: 'development',
   googleClientId,
   // redisConnection,
-  redisConnection:
-    'redis://conductor-redis.redis.cache.windows.net:6379,password=mdoBnI4aTmxwhXkXP1u02BssxMWrSVdiOVwNrq0hIDM=,ssl=Off,abortConnect=False',
+  redisConnection: 'redis://conductor-redis.redis.cache.windows.net',
   redisSecret,
   db,
   port: 3001,
