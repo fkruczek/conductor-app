@@ -12,10 +12,9 @@ declare module 'express-session' {
 
 export default function (app: Express): void {
   // TODO: secure session in prod
-  // if (app.get('env') === 'production') {
-  //     app.set('trust proxy', 1) // trust first proxy
-  //     sess.cookie.secure = true // serve secure cookies
-  // }
+  if (config.env === 'production') {
+    app.set('trust proxy', 2) // trust first proxy
+  }
 
   const RedisStore = connectRedis(session)
   const redisClient = redis.createClient(config.redisConnection, {
