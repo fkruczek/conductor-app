@@ -26,7 +26,9 @@ const production: Config = {
 const development: Config = {
   env: 'development',
   googleClientId,
-  redisConnection,
+  // redisConnection,
+  redisConnection:
+    'redis://conductor-redis.redis.cache.windows.net:6379,password=mdoBnI4aTmxwhXkXP1u02BssxMWrSVdiOVwNrq0hIDM=,ssl=Off,abortConnect=False',
   redisSecret,
   db,
   port: 3001,
