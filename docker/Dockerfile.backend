@@ -15,9 +15,10 @@ RUN yarn
 # add app
 COPY ./backend/ ./
 
-ENV CONDUCTOR_DB mongodb+srv://conductoruser:conductor@conductor.arytp.mongodb.net/conductor?retryWrites=true&w=majority
-ENV CONDUCTOR_GOOGLE_CLIENT_ID 396035779233-sgtpcv8252db9o4neu9ltokklvti5d1a.apps.googleusercontent.com
-ENV CONDUCTOR_REDIS_SECRET wqeriewqorowqerjwqeojirioew
+ENV CONDUCTOR_DB secret
+ENV CONDUCTOR_GOOGLE_CLIENT_ID secret
+ENV CONDUCTOR_REDIS_SECRET secret
+ENV CONDUCTOR_REDIS_CONNECTION secret
 ENV NODE_ENV production
 # start app
 RUN yarn build
