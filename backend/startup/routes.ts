@@ -1,4 +1,4 @@
-import config from 'config'
+import config from 'config/config'
 import cors from 'cors'
 import express, { Express } from 'express'
 import auth from '../routes/auth'
@@ -15,6 +15,6 @@ export default function (app: Express): void {
   app.use('/api/suites', suites)
   app.use('/api/rooms', rooms)
   app.get('/', (_, res) => {
-    res.status(200).send('hello world')
+    res.status(200).send('API WORKS')
   })
 }

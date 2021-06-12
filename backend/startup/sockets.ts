@@ -1,9 +1,9 @@
-import config from 'config'
+import config from 'config/config'
 import { Server as HttpServer } from 'http'
 import Suite from 'models/suite'
 import { Server, Socket } from 'socket.io'
 import { DefaultEventsMap } from 'socket.io/dist/typed-events'
-import { getLastValue } from 'utils'
+import { getLastValue } from 'utils/utils'
 import Room from './../models/room'
 
 export default function (httpServer: HttpServer): void {

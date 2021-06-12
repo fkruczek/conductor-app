@@ -1,4 +1,4 @@
-import config from 'config'
+import config from 'config/config'
 import express from 'express'
 import { OAuth2Client } from 'google-auth-library'
 import { LoginResponse } from 'types'

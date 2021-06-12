@@ -1,4 +1,4 @@
-import config from 'config'
+import config from 'config/config'
 import connectRedis from 'connect-redis'
 import { Express } from 'express'
 import session from 'express-session'
@@ -11,15 +11,14 @@ declare module 'express-session' {
 }
 
 export default function (app: Express): void {
-  // TODO: secure session in prod
   if (config.env === 'production') {
-    app.set('trust proxy', 5) // trust first proxy
+    app.set('trust proxy', true)
   }
 
   const RedisStore = connectRedis(session)
   const redisClient = redis.createClient(config.redisConnection, {
     port: 6379,
-    auth_pass: 'mdoBnI4aTmxwhXkXP1u02BssxMWrSVdiOVwNrq0hIDM=',
+    auth_pass: config.redisPassword,
   })
 
   redisClient.on('error', function (error: any) {
@@ -32,18 +31,16 @@ export default function (app: Express): void {
 
   app.use(
     session({
-      store: new RedisStore({ client: redisClient }),
+      store: new RedisStore({ client: redisClient, pass: config.redisSecret }),
       secret: config.redisSecret,
+      proxy: true, // check if needed
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
       cookie: {
-        domain: 'azurewebsites.net',
-        maxAge: 1000 * 60 * 60,
-        secure: true,
-        httpOnly: false,
-        sameSite: 'none',
+        secure: config.env === 'production' ? true : false,
+        sameSite: config.env === 'production' ? 'none' : false, // check if needed
+        httpOnly: config.env === 'production' ? true : false,
       },
-      // TODO: secure coookies
     })
   )
 }

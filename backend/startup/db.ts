@@ -1,4 +1,4 @@
-import config from 'config'
+import config from 'config/config'
 import { connect } from 'mongoose'
 
 export default async function (): Promise<void> {
