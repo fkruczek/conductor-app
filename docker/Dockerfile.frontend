@@ -13,8 +13,7 @@ ENV REACT_APP_API_URL https://conductor-api.azurewebsites.net
 # install app dependencies
 COPY frontend/package.json ./
 COPY frontend/yarn.lock ./
-RUN yarn --prod
-
+RUN yarn
 # add app
 COPY ./frontend/ ./
 
