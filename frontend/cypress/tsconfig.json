@@ -4,8 +4,9 @@
     "../node_modules/cypress",
     "*/*.ts"
   ],
+  "exclude": ["../node_modules/cypress/**/*.js"],
   "compilerOptions": {
+    "noEmit": false,
     "isolatedModules": false,
-    "noEmit": false
   },
 }
