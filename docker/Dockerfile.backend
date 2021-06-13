@@ -10,7 +10,7 @@ ENV NODE_PATH /app/node_modules/.bin:$PATH
 # install app dependencies
 COPY backend/package.json ./
 COPY backend/yarn.lock ./
-RUN yarn --prod
+RUN yarn
 
 # add app
 COPY ./backend/ ./
