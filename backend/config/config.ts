@@ -1,5 +1,5 @@
 interface Config {
-  env: 'production' | 'development'
+  env: 'production' | 'development' | 'test'
   googleClientId: string
   redisSecret: string
   db: string
@@ -37,7 +37,7 @@ const development: Config = {
 }
 
 const test: Config = {
-  env: 'development',
+  env: 'test',
   googleClientId: 'test',
   db: 'mongodb://localhost:27017/conductor-test?readPreference=primary&appname=Conductor&ssl=false',
   port: 3010,

@@ -14,6 +14,8 @@ redis(app)
 routes(app)
 sockets(httpServer)
 
-httpServer.listen(config.port, () => console.log('✅ Server has started...'))
+if (config.env !== 'test') {
+  httpServer.listen(config.port, () => console.log('✅ Server has started...'))
+}
 
 export default app

@@ -1,4 +1,7 @@
 import axios from 'axios'
+if (process.env.NODE_ENV === 'test') {
+  process.env.REACT_APP_API_URL = 'a'
+}
 
 if (!process.env.REACT_APP_API_URL) {
   throw new Error('❌ REACT_APP_API_URL is undefined!!!')

@@ -5,6 +5,10 @@ import { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-lo
 import { api } from 'utils/apiClient'
 import { useAsync } from 'utils/useAsync'
 
+if (process.env.NODE_ENV === 'test') {
+  process.env.REACT_APP_GOOGLE_CLIENT_ID = 'a'
+}
+
 if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
   throw new Error('❌ REACT_APP_GOOGLE_CLIENT_ID is undefined!!!')
 }

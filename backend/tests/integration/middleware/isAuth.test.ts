@@ -27,3 +27,5 @@ describe('isAuth middleware', () => {
     await request(app).delete('/api/rooms').set('Cookie', header['set-cookie']).expect(404)
   })
 })
+
+// TODO: turn off server  after

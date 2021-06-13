@@ -21,8 +21,8 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react", // for the css prop,
     "baseUrl": "./src/",
-    
     "noImplicitReturns": true,
+    "types": ["cypress"]
   },
   "include": [
     "src",

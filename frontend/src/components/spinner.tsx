@@ -4,7 +4,7 @@ import 'twin.macro'
 
 const Spinner = () => {
   return (
-    <div tw="h-20 w-20">
+    <div tw="h-20 w-20" aria-label="loading">
       <svg tw="animate-spin mr-3 h-20 w-20 text-field" fill="none" viewBox="0 0 24 24">
         <circle
           tw="opacity-25"
