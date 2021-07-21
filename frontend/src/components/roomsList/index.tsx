@@ -1,6 +1,5 @@
 import { LinkButton } from 'components/button'
 import { useAuthContext } from 'context/authContext'
-import React from 'react'
 import GoogleLogin from 'react-google-login'
 const MainSection = () => {
   const { handleLoginSuccess, handleLoginFailure, user } = useAuthContext()

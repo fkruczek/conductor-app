@@ -161,6 +161,7 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
 
   function handleConductorPageChange(conductorCurrentPage: number, conductorPages: number[]) {
     const myPagesArray = getMyPagesArray()
+
     myPagesArray.forEach((measure, index) => {
       let foundInvalidPage = false
       if (measure < conductorPages[index]) {
@@ -173,7 +174,7 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
     })
 
     const firstConductorMeasure = conductorPages[conductorCurrentPage - 1]
-    const lastConductorMeasure = conductorPages[conductorCurrentPage] - 1 ?? null
+    const lastConductorMeasure = conductorPages[conductorCurrentPage] - 1 || Infinity
 
     if (switchMode === 'continuous') {
       goToMeasure(firstConductorMeasure)
@@ -182,16 +183,13 @@ export default function Score({ musicXML, conductorLocation, isOwner }: ScorePro
 
     let myPage = 0
 
-    if (!lastConductorMeasure) {
-      goToMeasure(myPagesArray[myPagesArray.length - 1])
-    }
-
     while (firstConductorMeasure >= myPagesArray[myPage]) myPage++
 
-    if (lastConductorMeasure > myPagesArray[myPage] - 1) {
+    if (lastConductorMeasure >= myPagesArray[myPage]) {
       goToMeasure(firstConductorMeasure)
       return
     }
+
     goToMeasure(myPagesArray[myPage - 1])
   }
 

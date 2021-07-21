@@ -21,6 +21,7 @@ ENV CONDUCTOR_REDIS_SECRET secret
 ENV CONDUCTOR_REDIS_CONNECTION secret
 ENV NODE_ENV production
 
+
 # start app
 RUN yarn build
 
